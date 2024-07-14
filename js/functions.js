@@ -1,14 +1,20 @@
 
 // Функция №1
 const stringLength = (string, length) => {
-  if (string.replaceAll(' ', '').length <= length) {
+  let normalizedStr = string.replaceAll(' ', '');
+  if (normalizedStr.length < length) {
+    console.log('Строка короче ' + length + ' символов');
     return true;
-  } else {
+  } else if (normalizedStr.length === length) {
+    console.log('Длина строки ровно ' + length + ' символов');
+    return true;
+  } else if (normalizedStr.length > length) {
+    console.log('Строка длиннее ' + length + ' символов');
     return false;
   }
 }
 
-console.log(stringLength('но мы не можем его изменить', 30));
+console.log(stringLength('но мы не можем его изменить', 22));
 
 // Функция №2
 const isPalindrome = (string) => {
