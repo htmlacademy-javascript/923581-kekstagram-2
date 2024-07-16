@@ -6,12 +6,8 @@
 
 console.log('Функция №1');
 
-// Записываем функцию в переменную, в параметрах указываем дефолтное значение
-const checkStringLength = (str = '', maxSymbols = 1) => {
-
-  // Сравниваем длину строки с количеством символов
-  return str.length <= maxSymbols;
-}
+// Записываем функцию в переменную, в параметрах указываем дефолтное значение и => Сравниваем длину строки с количеством символов
+const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols;
 
 console.log(checkStringLength('видеоплеер', 10));
 console.log(checkStringLength('Функция для проверки длины строк', 30));
@@ -25,7 +21,7 @@ console.log('Функция №2');
 const isPalindrome = (str) => {
 
   // Нормализуем строку, приводя её к нижнему регистру и убирая пробельные символы
-  let normalizedString = str.toLowerCase().replaceAll(' ', '');
+  const normalizedString = str.toLowerCase().replaceAll(' ', '');
 
   // Создаём пустую строку для хранения перевернутой строки
   let newString = '';
@@ -37,11 +33,11 @@ const isPalindrome = (str) => {
 
   // Сравниваем нормализованную и перевернутую строки
   return newString === normalizedString;
-}
+};
 
-console.log('\"Лёша на полке клопа нашёл\" - это палиндром? -', isPalindrome('Лёша на полке клопа нашёл'));
-console.log('\"ДовОд\" - это палиндром? -', isPalindrome('ДовОд'));
-console.log('\"АбраКадАбра\" - это палиндром? -', isPalindrome('АбраКадАбра'));
+console.log('Лёша на полке клопа нашёл - это палиндром? -', isPalindrome('Лёша на полке клопа нашёл'));
+console.log('ДовОд - это палиндром? -', isPalindrome('ДовОд'));
+console.log('АбраКадАбра - это палиндром? -', isPalindrome('АбраКадАбра'));
 
 // Функция №3
 /*Функция принимает строку,
@@ -62,7 +58,7 @@ function extractNumbersFromString(str) {
   }
 
   // Используем регулярное выражение для извлечения цифр из строки
-  let result = str.match(/\d+/g);
+  const result = str.match(/\d+/g);
 
   // Если в строке нет ни одной цифры, возвращаем NaN
   if (!result) {
