@@ -1,0 +1,117 @@
+
+import { messages, names, descriptions, ranges } from './data.js';
+import { getRandomInt, getRandomElement, checkStringLength } from './util.js';
+
+//*  =============================================================================
+// Функция №1
+/*Функция для проверки длины строки.Она принимает строку, которую нужно проверить,
+и максимальную длину и возвращает true, если строка меньше или равна указанной длине,
+и false, если строка длиннее.*/
+
+// console.log('Функция №1');
+// console.log(checkStringLength('видеоплеер', 10));
+// console.log(checkStringLength('Функция для проверки длины строк', 30));
+// console.log(checkStringLength('', 1));
+
+// Функция №2
+/*Функция для проверки, является ли строка палиндромом.
+Палиндром — это слово или фраза, которые одинаково читаются и слева направо и справа налево.*/
+
+// console.log('Функция №2');
+const isPalindrome = (str) => {
+
+  // Нормализуем строку, приводя её к нижнему регистру и убирая пробельные символы
+  const normalizedString = str.toLowerCase().replaceAll(' ', '');
+
+  // Создаём пустую строку для хранения перевернутой строки
+  let newString = '';
+
+  // Создаем цикл для перебора символов в обратном порядке
+  for (let i = normalizedString.length - 1; i >= 0; i--) {
+    newString += normalizedString.at(i);
+  }
+
+  // Сравниваем нормализованную и перевернутую строки
+  return newString === normalizedString;
+};
+
+// console.log('Лёша на полке клопа нашёл - это палиндром? -', isPalindrome('Лёша на полке клопа нашёл'));
+// console.log('ДовОд - это палиндром? -', isPalindrome('ДовОд'));
+// console.log('АбраКадАбра - это палиндром? -', isPalindrome('АбраКадАбра'));
+
+// Функция №3
+/*Функция принимает строку,
+извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа.
+Если в строке нет ни одной цифры, функция должна вернуть NaN*/
+
+// console.log('Функция №3');
+function extractNumbersFromString(str) {
+  // Проверяем, является ли аргумент строкой
+  if (typeof str !== 'string') {
+    // Если аргумент - число, преобразуем его в строку
+    if (typeof str === 'number') {
+      str = str.toString();
+    } else {
+      // Если аргумент не является ни строкой, ни числом, возвращаем NaN
+      return NaN;
+    }
+  }
+
+  // Используем регулярное выражение для извлечения цифр из строки
+  const result = str.match(/\d+/g);
+
+  // Если в строке нет ни одной цифры, возвращаем NaN
+  if (!result) {
+    return NaN;
+  }
+
+  // Преобразуем массив цифр в строку и затем в число
+  return parseInt(result.join(''), 10);
+}
+
+// console.log('Ожидаем 2005 -', extractNumbersFromString('год 2005'));
+// console.log('Ожидаем 2022 -', extractNumbersFromString('ECMAScript 2022'));
+// console.log('Ожидаем 105 -', extractNumbersFromString('1 кефир, 0.5 батона'));
+// console.log('Ожидаем 7 -', extractNumbersFromString('агент 007'));
+// console.log('Ожидаем 1545454 -', extractNumbersFromString(1545454));
+
+//*  ======================== Генерация массивов с фото, описанием и комментариями ========================
+
+// Создаем массив комментариев со случайными сообщениями и именами
+function generateComments() {
+
+  const commentsCount = getRandomInt(ranges.comments.MIN, ranges.comments.MAX);
+  const comments = [];
+
+  for (let i = 0; i < commentsCount; i++) {
+    comments.push({
+      id: i + 1, // Идентификатор комментария
+      avatar: `img/avatar-${getRandomInt(ranges.avatars.MIN, ranges.avatars.MAX)}.svg`, // Аватарка
+      message: getRandomElement(messages), // Сообщение
+      name: getRandomElement(names) // Имя
+    });
+  }
+
+  return comments;
+}
+
+// Создаем массив фотографий со случайными описаниями фото, списком комментариев и лайками.
+function generatePhotos() {
+  const photos = [];
+
+  for (let i = ranges.photos.MIN; i <= ranges.photos.MAX; i++) {
+    photos.push({
+      id: i, // Идентификатор фотографии
+      url: `photos/${i}.jpg`, // URL фотографии
+      description: descriptions[i - 1], // Описание
+      likes: getRandomInt(ranges.likes.MIN, ranges.likes.MAX), // Количество лайков
+      comments: generateComments() // Список комментариев
+    });
+  }
+
+  return photos;
+}
+
+// Генерация массива фотографий
+const photoArray = generatePhotos();
+console.log(photoArray);
