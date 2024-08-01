@@ -1,6 +1,5 @@
 
-import { messages, names, descriptions, ranges } from './data.js';
-import { getRandomInt, getRandomElement, checkStringLength } from './util.js';
+import { checkStringLength } from './util.js';
 
 //*  =============================================================================
 // Функция №1
@@ -75,43 +74,3 @@ function extractNumbersFromString(str) {
 // console.log('Ожидаем 7 -', extractNumbersFromString('агент 007'));
 // console.log('Ожидаем 1545454 -', extractNumbersFromString(1545454));
 
-//*  ======================== Генерация массивов с фото, описанием и комментариями ========================
-
-// Создаем массив комментариев со случайными сообщениями и именами
-function generateComments() {
-
-  const commentsCount = getRandomInt(ranges.comments.MIN, ranges.comments.MAX);
-  const comments = [];
-
-  for (let i = 0; i < commentsCount; i++) {
-    comments.push({
-      id: i + 1, // Идентификатор комментария
-      avatar: `img/avatar-${getRandomInt(ranges.avatars.MIN, ranges.avatars.MAX)}.svg`, // Аватарка
-      message: getRandomElement(messages), // Сообщение
-      name: getRandomElement(names) // Имя
-    });
-  }
-
-  return comments;
-}
-
-// Создаем массив фотографий со случайными описаниями фото, списком комментариев и лайками.
-function generatePhotos() {
-  const photos = [];
-
-  for (let i = ranges.photos.MIN; i <= ranges.photos.MAX; i++) {
-    photos.push({
-      id: i, // Идентификатор фотографии
-      url: `photos/${i}.jpg`, // URL фотографии
-      description: descriptions[i - 1], // Описание
-      likes: getRandomInt(ranges.likes.MIN, ranges.likes.MAX), // Количество лайков
-      comments: generateComments() // Список комментариев
-    });
-  }
-
-  return photos;
-}
-
-// Генерация массива фотографий
-const photoArray = generatePhotos();
-console.log(photoArray);

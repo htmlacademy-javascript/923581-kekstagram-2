@@ -1,4 +1,5 @@
-import './data.js';
-import './util.js';
-import './functions.js';
+import { generatePhotos } from './data.js'
 
+// Генерация массива фотографий
+const photos = generatePhotos();
+console.log(photos);
