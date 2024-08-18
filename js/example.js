@@ -1,4 +1,4 @@
-export const MOKED_PHOTOS = [
+export const MOCKED_PHOTOS = [
   {
     "id": 0,
     "url": "photos/1.jpg",
