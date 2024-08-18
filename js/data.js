@@ -21,7 +21,7 @@ const generateComments = () => {
   }
 
   return comments;
-}
+};
 
 // Создаем массив фотографий со случайными описаниями фото, списком комментариев и лайками.
 const generatePhotos = () => {
@@ -38,6 +38,6 @@ const generatePhotos = () => {
   }
 
   return photos;
-}
+};
 
 export { generatePhotos };
