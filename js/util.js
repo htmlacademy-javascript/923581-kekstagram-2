@@ -15,6 +15,6 @@ const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 // Возвращаем случайный элемент из переданного массива.
-const getRandomElement = arr => arr[getRandomInt(0, arr.length - 1)];
+const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
 
 export { getRandomInt, getRandomElement, checkStringLength };

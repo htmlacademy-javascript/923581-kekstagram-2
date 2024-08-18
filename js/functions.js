@@ -1,12 +1,3 @@
-
-  /**
-   *
-   * @param {*} workDayStart
-   * @param {*} workDayEnd
-   * @param {*} meetingStart
-   * @param {*} meetingDuration
-   * @returns
-   */
 const isWithinWorkingHours = (workDayStart, workDayEnd, meetingStart, meetingDuration) => {
   // Функция для преобразования времени в минуты
   const timeToMinutes = (timeStr) => {
@@ -21,7 +12,6 @@ const isWithinWorkingHours = (workDayStart, workDayEnd, meetingStart, meetingDur
 
   // Вычисляем время окончания встречи
   const meetingEndMinutes = meetingStartMinutes + meetingDuration;
-
   // Проверяем, укладывается ли встреча в рабочий день
   return (
     meetingStartMinutes >= workDayStartMinutes &&
