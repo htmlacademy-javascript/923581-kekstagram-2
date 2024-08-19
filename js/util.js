@@ -1,8 +1,11 @@
-/*Функция для проверки длины строки.Она принимает строку, которую нужно проверить,
-и максимальную длину и возвращает true, если строка меньше или равна указанной длине,
+/*Функция для проверки длины строки.*/
+/**
+ *
+ * @param {*} str - строка, которую нужно проверить
+ * @param {*} maxSymbols - максимальное количество символов
+ * @returns - возвращает true, если строка меньше или равна указанной длине,
 и false, если строка длиннее.
-Записываем функцию в переменную, в параметрах указываем дефолтное значение и => Сравниваем длину строки с количеством символов.*/
-
+ */
 const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols;
 //  пример вызова функции
 // console.log(checkStringLength('Функция для проверки длины строк', 30));
@@ -12,6 +15,6 @@ const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 // Возвращаем случайный элемент из переданного массива.
-const getRandomElement = arr => arr[getRandomInt(0, arr.length - 1)];
+const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
 
 export { getRandomInt, getRandomElement, checkStringLength };

@@ -10,6 +10,7 @@ const generateComments = () => {
   const commentsCount = getRandomInt(Ranges.COMMENTS.MIN, Ranges.COMMENTS.MAX);
   const comments = [];
 
+
   for (let i = 0; i < commentsCount; i++) {
     comments.push({
       id: i + 1, // Идентификатор комментария
@@ -20,7 +21,7 @@ const generateComments = () => {
   }
 
   return comments;
-}
+};
 
 // Создаем массив фотографий со случайными описаниями фото, списком комментариев и лайками.
 const generatePhotos = () => {
@@ -37,6 +38,6 @@ const generatePhotos = () => {
   }
 
   return photos;
-}
+};
 
 export { generatePhotos };
