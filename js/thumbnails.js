@@ -1,4 +1,3 @@
-import { MOCKED_PHOTOS as MOCKED_PHOTOS } from './example.js';
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const container = document.querySelector('.pictures');
 
