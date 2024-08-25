@@ -1,46 +1,27 @@
 const template = document.querySelector('#picture').content.querySelector('.picture');
-const container = document.querySelector('.pictures');
-
+const bigPictureNode = document.querySelector('.pictures');
 
 const createThumbnail = (photo) => {
-  const thambnail = template.cloneNode(true);
-  const image = thambnail.querySelector('.picture__img');
+  const thumbnail = template.cloneNode(true); // Исправлено на thumbnail
+  const image = thumbnail.querySelector('.picture__img');
   image.src = photo.url;
   image.alt = photo.description;
 
-  thambnail.querySelector('.picture__likes').textContent = photo.likes;
-  thambnail.querySelector('.picture__comments').textContent = photo.comments.length;
+  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+  thumbnail.querySelector('.picture__comments').textContent = photo.comments ? photo.comments.length : 0; // Проверка на наличие комментариев: Если photo.comments может быть undefined, стоит добавить проверку, чтобы избежать ошибок.
 
-  return thambnail;
+  return thumbnail;
 };
-
-// *======== Вариант с циклом for ========
-
-/* for (let i = 0; i < MOCKED_PHOTOS.length; i++) {
-  const photo = MOCKED_PHOTOS[i]; // Определяем photo как текущий элемент массива
-  const thambnail = createThumbnail(photo);
-  fragment.appendChild(thambnail);
-};
-container.appendChild(fragment); */
-
-// *======== Вариант с for of ========
-
-/* for (const photo of MOCKED_PHOTOS) {
-  const thambnail = createThumbnail(photo);
-  fragment.appendChild(thambnail);
-};
-container.appendChild(fragment); */
-
-
-// *======== Вариант с forEach ========
 
 const renderCards = (data) => {
   const fragment = document.createDocumentFragment();
   data.forEach((photo) => {
     const thumbnail = createThumbnail(photo);
+    thumbnail.dataset.pictureId = photo.id; // Используем photo.id вместо id
+    
     fragment.appendChild(thumbnail);
   });
-  container.appendChild(fragment);
+  bigPictureNode.appendChild(fragment);
 };
 
-export { renderCards }
+export { renderCards };
