@@ -4,6 +4,7 @@ const bigPicture = document.querySelector('.big-picture');
 const bigPictureOpen = document.querySelector('.pictures');
 const bigPictureClose = document.querySelector('#picture-cancel');
 
+
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -12,9 +13,13 @@ const onDocumentKeydown = (evt) => {
 };
 
 function showPhoto(evt) {
-  if (evt.target.matches('.picture__img')) {
+  if (evt.target.closest('.picture__img')) {
     const imgSrc = evt.target.getAttribute('src'); // Получаем путь к изображению
     bigPicture.querySelector('img').src = imgSrc; // Устанавливаем источник изображения
+
+
+
+
     bigPicture.classList.remove('hidden');
     document.addEventListener('keydown', onDocumentKeydown);
   }
@@ -46,9 +51,7 @@ bigPictureClose.addEventListener('keydown', (evt) => {
   }
 });
 
-// Добавляем обработчики событий
-// bigPictureOpen.addEventListener('click', showPhoto);
-// bigPictureClose.addEventListener('click', closePhoto);
+
 
 
 
