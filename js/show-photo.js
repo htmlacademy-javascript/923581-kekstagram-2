@@ -2,7 +2,12 @@ import { isEscapeKey, isEnterKey } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureOpen = document.querySelector('.pictures');
-const bigPictureClose = document.querySelector('#picture-cancel');
+const bigPictureImg = bigPicture.querySelector('.big-picture__img').querySelector('img');
+const likesCount = bigPicture.querySelector('.likes-count');
+const socialComments = bigPicture.querySelector('.social__comments');
+const socialCommentsTemplate = bigPicture.querySelector('.social__comment');
+const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
+
 
 
 const onDocumentKeydown = (evt) => {
@@ -15,15 +20,18 @@ const onDocumentKeydown = (evt) => {
 function showPhoto(evt) {
   if (evt.target.closest('.picture__img')) {
     const imgSrc = evt.target.getAttribute('src'); // Получаем путь к изображению
-    bigPicture.querySelector('img').src = imgSrc; // Устанавливаем источник изображения
-
-
-
+    bigPictureImg.src = imgSrc; // Устанавливаем источник изображения
 
     bigPicture.classList.remove('hidden');
     document.addEventListener('keydown', onDocumentKeydown);
   }
 }
+
+
+
+
+
+//  ==============================================
 
 function closePhoto() {
   bigPicture.classList.add('hidden');
@@ -50,7 +58,6 @@ bigPictureClose.addEventListener('keydown', (evt) => {
     closePhoto();
   }
 });
-
 
 
 
