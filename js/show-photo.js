@@ -21,6 +21,8 @@ const socialComments = bigPicture.querySelector('.social__comments'); // Кон�
 const socialCommentsTemplate = bigPicture.querySelector('.social__comment'); // Шаблон комментария
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel'); // Кнопка закрытия модального окна
 const socialCaption = bigPicture.querySelector('.social__caption'); // Элемент для отображения описания фотографии
+const commentCount = bigPicture.querySelector('.social__comment-count'); // Блок счётчика комментариев
+const commentsLoader = bigPicture.querySelector('.comments-loader'); // Блок загрузки новых комментариев
 
 // Устанавливаем tabindex для элемента, чтобы он был доступен для навигации с клавиатуры
 bigPictureOpen.setAttribute('tabindex', '0');
@@ -43,6 +45,10 @@ const showPhoto = (evt) => {
   bigPictureImg.src = imgSrc; // Устанавливаем источник для большого изображения
   bigPicture.classList.remove('hidden'); // Показываем модальное окно
   document.body.classList.add('modal-open'); // Блокируем прокрутку страницы
+
+  // Скрываем блоки счётчика комментариев и загрузки новых комментариев
+  commentCount.classList.add('hidden'); // Добавляем класс hidden к блоку счётчика комментариев
+  commentsLoader.classList.add('hidden'); // Добавляем класс hidden к блоку загрузки новых комментариев
 
   const pictureElement = imgElement.closest('.picture'); // Находим родительский элемент с классом picture
   const likesElement = pictureElement.querySelector('.picture__likes'); // Получаем элемент с количеством лайков
