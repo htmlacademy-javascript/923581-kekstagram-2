@@ -6,3 +6,4 @@ import './show-photo.js';
 const photos = generatePhotos();
 renderCards(photos);
 
+
