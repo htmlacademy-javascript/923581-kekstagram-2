@@ -12,52 +12,53 @@ import { isEscapeKey, isEnterKey } from './util.js';
 import { generateComments } from './data.js';
 
 // Получаем элементы DOM, которые будем использовать
-const bigPicture = document.querySelector('.big-picture'); // Модальное окно с большим изображением
-const bigPictureOpen = document.querySelector('.pictures'); // Элемент, по которому кликаем для открытия изображения
-const bigPictureImg = bigPicture.querySelector('.big-picture__img img'); // Изображение в модальном окне
-const likesCount = bigPicture.querySelector('.likes-count'); // Элемент для отображения количества лайков
-const socialComments = bigPicture.querySelector('.social__comments'); // Контейнер для комментариев
-const socialCommentsTemplate = bigPicture.querySelector('.social__comment'); // Шаблон комментария
-const bigPictureClose = bigPicture.querySelector('.big-picture__cancel'); // Кнопка закрытия модального окна
+const bigPicture = document.querySelector('.big-picture');
+const bigPictureOpen = document.querySelector('.pictures');
+const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+const likesCount = bigPicture.querySelector('.likes-count');
+const socialComments = bigPicture.querySelector('.social__comments');
+const socialCommentsTemplate = bigPicture.querySelector('.social__comment');
+const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 
-// Добавляем tabindex="0" для элемента bigPictureOpen
-bigPictureOpen.setAttribute('tabindex', '0'); // Теперь элемент доступен для навигации с клавиатуры
+bigPictureOpen.setAttribute('tabindex', '0');
 
 // Функция для обработки нажатий клавиш на документе
 const onDocumentKeydown = (evt) => {
-  // Если нажата клавиша Escape, закрываем фото
-  if (isEscapeKey(evt)) {
-    evt.preventDefault(); // Предотвращаем стандартное поведение
-    closePhoto(); // Закрываем фото
+  if (isEscapeKey(evt) || isEnterKey(evt)) {
+    evt.preventDefault();
+    closePhoto();
   }
 };
 
 // Функция для отображения фотографии
 const showPhoto = (evt) => {
-  // Находим элемент изображения, по которому кликнули
   const imgElement = evt.target.closest('.picture__img');
-  if (!imgElement) return; // Если элемент не найден, выходим из функции
+  if (!imgElement) return;
 
-  // Получаем источник изображения и устанавливаем его в модальное окно
   const imgSrc = imgElement.getAttribute('src');
   bigPictureImg.src = imgSrc;
-  bigPicture.classList.remove('hidden'); // Убираем класс скрытия
-  document.body.classList.add('modal-open'); // Блокируем прокрутку страницы
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
 
-  // Обновляем количество лайков
-  const likesElement = imgElement.closest('.picture').querySelector('.picture__likes');
+  const pictureElement = imgElement.closest('.picture');
+  const likesElement = pictureElement.querySelector('.picture__likes');
+  const commentsCountElement = pictureElement.querySelector('.picture__comments');
+
   if (likesElement) {
-    likesCount.textContent = likesElement.textContent; // Устанавливаем количество лайков
+    likesCount.textContent = likesElement.textContent;
   }
 
-  // Генерируем комментарии
-  const comments = generateComments(); // Генерируем комментарии
-  renderComments(comments); // Отображаем комментарии
+  const totalCount = parseInt(commentsCountElement.textContent, 10);
+  const comments = generateComments();
 
-  // Добавляем tabindex="0" для элемента bigPictureClose
-  bigPictureClose.setAttribute('tabindex', '0'); // Теперь элемент доступен для навигации с клавиатуры
+  if (comments.length === 0) {
+    console.warn('Нет комментариев для отображения');
+    return;
+  }
 
-  // Добавляем обработчики событий для закрытия модального окна
+  renderComments(comments, totalCount);
+
+  // Добавляем обработчики событий
   document.addEventListener('keydown', onDocumentKeydown);
   bigPictureClose.addEventListener('click', closePhoto);
   bigPictureClose.addEventListener('keydown', onClosePhotoKeydown);
@@ -65,36 +66,39 @@ const showPhoto = (evt) => {
 };
 
 // Функция для отображения комментариев
-const renderComments = (comments) => {
-  // Очищаем предыдущие комментарии
-  socialComments.innerHTML = '';
+const renderComments = (comments, totalCount) => {
+  const fragment = document.createDocumentFragment(); // Создаем фрагмент для оптимизации работы с DOM
+  socialComments.innerHTML = ''; // Очищаем контейнер для комментариев
 
-  // Обновляем счетчик комментариев
   const shownCount = comments.length; // Количество отображаемых комментариев
-  const totalCount = 125; // Общее количество комментариев (можно изменить по необходимости)
-  document.querySelector('.social__comment-shown-count').textContent = shownCount; // Обновляем отображаемое количество
-  document.querySelector('.social__comment-total-count').textContent = totalCount; // Обновляем общее количество
 
-  // Добавляем комментарии в разметку
+  // Устанавливаем ограничение на shownCount
+  const displayedCount = Math.min(shownCount, totalCount); // Устанавливаем displayedCount как минимум из shownCount и totalCount
+
+  document.querySelector('.social__comment-shown-count').textContent = displayedCount; // Обновляем отображаемое количество
+  document.querySelector('.social__comment-total-count').textContent = totalCount; // Устанавливаем общее количество комментариев
+
+  // Проходим по каждому комментарию и добавляем его в контейнер
   comments.forEach(comment => {
     const commentElement = socialCommentsTemplate.cloneNode(true); // Клонируем шаблон комментария
-    const img = commentElement.querySelector('.social__picture'); // Находим элемент для изображения комментария
-    const text = commentElement.querySelector('.social__text'); // Находим элемент для текста комментария
+    const img = commentElement.querySelector('.social__picture'); // Получаем элемент изображения комментария
+    const text = commentElement.querySelector('.social__text'); // Получаем элемент текста комментария
 
-    // Устанавливаем данные комментария
+    // Заполняем данные комментария
     img.src = comment.avatar; // Устанавливаем аватар
     img.alt = comment.name; // Устанавливаем альтернативный текст
     text.textContent = comment.message; // Устанавливаем текст комментария
 
-    // Добавляем комментарий в контейнер
-    socialComments.appendChild(commentElement);
+    fragment.appendChild(commentElement); // Добавляем элемент комментария во фрагмент
   });
+
+  socialComments.appendChild(fragment); // Добавляем все комментарии во фрагмент в контейнер
 };
 
 // Функция для закрытия фотографии
 const closePhoto = () => {
-  bigPicture.classList.add('hidden'); // Добавляем класс скрытия
-  document.body.classList.remove('modal-open'); // Разрешаем прокрутку страницы
+  bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
 
   // Удаляем обработчики событий
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -105,7 +109,6 @@ const closePhoto = () => {
 
 // Функция для обработки нажатий клавиш на кнопке закрытия
 const onClosePhotoKeydown = (evt) => {
-  // Если нажата клавиша Enter, закрываем фото
   if (isEnterKey(evt)) {
     closePhoto();
   }
@@ -113,7 +116,6 @@ const onClosePhotoKeydown = (evt) => {
 
 // Функция для обработки клика вне изображения
 const onClosePhotoClick = (evt) => {
-  // Если кликнули на область модального окна, закрываем фото
   if (evt.target === bigPicture) {
     closePhoto();
   }
@@ -122,18 +124,6 @@ const onClosePhotoClick = (evt) => {
 // Добавляем обработчики событий для открытия фото
 bigPictureOpen.addEventListener('click', showPhoto);
 bigPictureOpen.addEventListener('keydown', (evt) => {
-  // Если нажата клавиша Enter, открываем фото
-  if (isEnterKey(evt)) {
-    showPhoto(evt);
-  }
-});
-
-// Добавляем обработчики событий для открытия фото
-bigPictureOpen.addEventListener('click', showPhoto);
-
-// Добавляем обработчик события keydown непосредственно на bigPictureOpen
-bigPictureOpen.addEventListener('keydown', (evt) => {
-  // Если нажата клавиша Enter, открываем фото
   if (isEnterKey(evt)) {
     showPhoto(evt);
   }
