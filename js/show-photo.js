@@ -17,15 +17,23 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-function showPhoto(evt) {
+const showPhoto = (evt) => {
   if (evt.target.closest('.picture__img')) {
     const imgSrc = evt.target.getAttribute('src'); // Получаем путь к изображению
     bigPictureImg.src = imgSrc; // Устанавливаем источник изображения
-
     bigPicture.classList.remove('hidden');
     document.addEventListener('keydown', onDocumentKeydown);
+
+    // Обновляем количество лайков
+    const likesElement = evt.target.closest('.picture').querySelector('.picture__likes');
+    if (likesElement) {
+      likesCount.textContent = likesElement.textContent;
+    }
+
+
   }
-}
+};
+
 
 
 
