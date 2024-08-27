@@ -3,12 +3,11 @@ import { generateComments } from './data.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureOpen = document.querySelector('.pictures');
-const bigPictureImg = bigPicture.querySelector('.big-picture__img').querySelector('img');
+const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const socialComments = bigPicture.querySelector('.social__comments');
 const socialCommentsTemplate = bigPicture.querySelector('.social__comment');
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
-
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -18,27 +17,31 @@ const onDocumentKeydown = (evt) => {
 };
 
 const showPhoto = (evt) => {
-  if (evt.target.closest('.picture__img')) {
-    const imgSrc = evt.target.getAttribute('src'); // Получаем путь к изображению
-    bigPictureImg.src = imgSrc; // Устанавливаем источник изображения
-    bigPicture.classList.remove('hidden');
-    document.body.classList.add('modal-open');
-    document.addEventListener('keydown', onDocumentKeydown);
+  const imgElement = evt.target.closest('.picture__img');
+  if (!imgElement) return;
 
-    // Обновляем количество лайков
-    const likesElement = evt.target.closest('.picture').querySelector('.picture__likes');
-    if (likesElement) {
-      likesCount.textContent = likesElement.textContent;
-    }
+  const imgSrc = imgElement.getAttribute('src');
+  bigPictureImg.src = imgSrc;
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
 
-    // Генерируем комментарии
-    const comments = generateComments();
-    renderComments(comments);
-
+  // Обновляем количество лайков
+  const likesElement = imgElement.closest('.picture').querySelector('.picture__likes');
+  if (likesElement) {
+    likesCount.textContent = likesElement.textContent;
   }
+
+  // Генерируем комментарии
+  const comments = generateComments();
+  renderComments(comments);
+
+  // Добавляем обработчики событий
+  document.addEventListener('keydown', onDocumentKeydown);
+  bigPictureClose.addEventListener('click', closePhoto);
+  bigPictureClose.addEventListener('keydown', onClosePhotoKeydown);
+  bigPicture.addEventListener('click', onClosePhotoClick);
 };
 
-// Функция для отображения комментариев
 const renderComments = (comments) => {
   // Очищаем предыдущие комментарии
   socialComments.innerHTML = '';
@@ -63,47 +66,33 @@ const renderComments = (comments) => {
   });
 };
 
-
 const closePhoto = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
+  // Удаляем обработчики событий
   document.removeEventListener('keydown', onDocumentKeydown);
-}
+  bigPictureClose.removeEventListener('click', closePhoto);
+  bigPictureClose.removeEventListener('keydown', onClosePhotoKeydown);
+  bigPicture.removeEventListener('click', onClosePhotoClick);
+};
 
-bigPictureOpen.addEventListener('click', (evt) => {
-  showPhoto(evt);
-});
+const onClosePhotoKeydown = (evt) => {
+  if (isEnterKey(evt)) {
+    closePhoto();
+  }
+};
 
+const onClosePhotoClick = (evt) => {
+  if (evt.target === bigPicture) {
+    closePhoto();
+  }
+};
+
+// Обработчик для открытия фото
+bigPictureOpen.addEventListener('click', showPhoto);
 bigPictureOpen.addEventListener('keydown', (evt) => {
   if (isEnterKey(evt)) {
     showPhoto(evt);
   }
 });
-
-bigPictureClose.addEventListener('click', () => {
-  closePhoto();
-});
-
-bigPictureClose.addEventListener('keydown', (evt) => {
-  if (isEnterKey(evt)) {
-    closePhoto();
-  }
-});
-
-// обработчик нажатия клавиши Esc на весь документ, чтобы закрывать окно из любого места:
-document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closePhoto();
-  }
-});
-
-// обработчик клика на фон окна, чтобы закрывать его при клике вне изображения:
-bigPicture.addEventListener('click', (evt) => {
-  if (evt.target === bigPicture) {
-    closePhoto();
-  }
-});
-
-
