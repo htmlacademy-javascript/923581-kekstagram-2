@@ -22,6 +22,7 @@ const showPhoto = (evt) => {
     const imgSrc = evt.target.getAttribute('src'); // Получаем путь к изображению
     bigPictureImg.src = imgSrc; // Устанавливаем источник изображения
     bigPicture.classList.remove('hidden');
+    document.body.classList.add('modal-open');
     document.addEventListener('keydown', onDocumentKeydown);
 
     // Обновляем количество лайков
@@ -63,10 +64,9 @@ const renderComments = (comments) => {
 };
 
 
-//  ==============================================
-
-function closePhoto() {
+const closePhoto = () => {
   bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onDocumentKeydown);
 }
@@ -91,6 +91,19 @@ bigPictureClose.addEventListener('keydown', (evt) => {
   }
 });
 
+// обработчик нажатия клавиши Esc на весь документ, чтобы закрывать окно из любого места:
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closePhoto();
+  }
+});
 
+// обработчик клика на фон окна, чтобы закрывать его при клике вне изображения:
+bigPicture.addEventListener('click', (evt) => {
+  if (evt.target === bigPicture) {
+    closePhoto();
+  }
+});
 
 
