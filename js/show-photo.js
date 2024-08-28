@@ -46,7 +46,7 @@ const showPhoto = (evt) => {
   bigPicture.classList.remove('hidden'); // Показываем модальное окно
   document.body.classList.add('modal-open'); // Блокируем прокрутку страницы
 
-  // Скрываем блоки счётчика комментариев и загрузки новых комментариев
+  //* Скрываем блоки счётчика комментариев и загрузки новых комментариев
   commentCount.classList.add('hidden'); // Добавляем класс hidden к блоку счётчика комментариев
   commentsLoader.classList.add('hidden'); // Добавляем класс hidden к блоку загрузки новых комментариев
 
