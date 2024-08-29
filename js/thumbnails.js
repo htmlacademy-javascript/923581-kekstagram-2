@@ -1,43 +1,27 @@
-import { MOCKED_PHOTOS as MOCKED_PHOTOS } from './example.js';
 const template = document.querySelector('#picture').content.querySelector('.picture');
-const container = document.querySelector('.pictures');
-const fragment = document.createDocumentFragment();
+const bigPictureNode = document.querySelector('.pictures');
 
-const createThubnail = (photo) => {
-  const thambhail = template.cloneNode(true);
-  const image = thambhail.querySelector('.picture__img');
+const createThumbnail = (photo) => {
+  const thumbnail = template.cloneNode(true); // Исправлено на thumbnail
+  const image = thumbnail.querySelector('.picture__img');
   image.src = photo.url;
   image.alt = photo.description;
 
-  thambhail.querySelector('.picture__likes').textContent = photo.likes;
-  thambhail.querySelector('.picture__comments').textContent = photo.comments.length;
+  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+  thumbnail.querySelector('.picture__comments').textContent = photo.comments ? photo.comments.length : 0; // Проверка на наличие комментариев: Если photo.comments может быть undefined, стоит добавить проверку, чтобы избежать ошибок.
 
-  return thambhail;
+  return thumbnail;
 };
 
-// *======== Вариант с циклом for ========
-
-/* for (let i = 0; i < MOCKED_PHOTOS.length; i++) {
-  const photo = MOCKED_PHOTOS[i]; // Определяем photo как текущий элемент массива
-  const thambhail = createThubnail(photo);
-  fragment.appendChild(thambhail);
+const renderCards = (data) => {
+  const fragment = document.createDocumentFragment();
+  data.forEach((photo) => {
+    const thumbnail = createThumbnail(photo);
+    thumbnail.dataset.pictureId = photo.id; // Используем photo.id вместо id
+    
+    fragment.appendChild(thumbnail);
+  });
+  bigPictureNode.appendChild(fragment);
 };
-container.appendChild(fragment); */
 
-// *======== Вариант с for of ========
-
-/* for (const photo of MOCKED_PHOTOS) {
-  const thambhail = createThubnail(photo);
-  fragment.appendChild(thambhail);
-};
-container.appendChild(fragment); */
-
-
-// *======== Вариант с forEach ========
-
-MOCKED_PHOTOS.forEach((photo) => {
-  const thambhail = createThubnail(photo);
-  fragment.appendChild(thambhail);
-});
-container.appendChild(fragment);
-
+export { renderCards };

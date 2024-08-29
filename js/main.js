@@ -1,7 +1,9 @@
 import { generatePhotos } from './data.js';
-import './thumbnails.js';
+import { renderCards } from './thumbnails.js';
+import './show-photo.js';
 
 // Генерация массива фотографий
 const photos = generatePhotos();
-console.log(photos);
+renderCards(photos);
+
 
