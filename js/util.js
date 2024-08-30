@@ -17,4 +17,9 @@ const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) +
 // Возвращаем случайный элемент из переданного массива.
 const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
 
-export { getRandomInt, getRandomElement, checkStringLength };
+// оформляем проверку нажатой клавиши в утилитарную функцию
+const isEscapeKey = (evt) => evt.key === 'Escape';
+const isEnterKey = (evt) => evt.key === 'Enter';
+
+
+export { getRandomInt, getRandomElement, checkStringLength, isEscapeKey, isEnterKey };
