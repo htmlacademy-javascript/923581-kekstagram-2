@@ -1,22 +1,18 @@
-//* Импорт функций
-// Код начинает с импорта функций isEscapeKey и isEnterKey, которые, вероятно, определяют, была ли нажата клавиша Escape или Enter соответственно. Это позволяет обрабатывать нажатия клавиш для закрытия модального окна.
-//* Получение элементов
-// Далее, код получает доступ к различным элементам модального окна, таким как изображение, описание, количество лайков и комментариев, а также кнопка закрытия.
-//* Обработка нажатий клавиш
-// Функция onDocumentKeydown обрабатывает нажатия клавиш и закрывает модальное окно, если нажата клавиша Escape или Enter.
-//* Создание комментариев
-// Функция createComment создает элемент комментария, клонируя шаблон и заполняя его данными (аватар, имя, сообщение).
-//* Отображение комментариев
-// Функция renderComments отвечает за отображение всех комментариев, создавая их с помощью createComment и добавляя в контейнер.
-//* Отображение модального окна
-// Функция renderModal устанавливает изображение, описание и количество лайков, а также вызывает функцию для отображения комментариев.
-//* Показ модального окна
-// Функция showModal убирает класс 'hidden' с модального окна и блокирует прокрутку страницы.
-//* Открытие модального окна
-// Функция openModal открывает модальное окно, копируя комментарии и добавляя обработчики событий для закрытия окна.
-//* Закрытие модального окна
-// Функция closeModal скрывает модальное окно и удаляет обработчики событий.
-//* Обработка событий закрытия
+// Импорт функций
+// Импортируются функции, которые помогут определить, была ли нажата клавиша Escape или Enter, а также функции для работы с комментариями.
+// Получение элементов
+// Код получает доступ к различным элементам модального окна, чтобы впоследствии изменять их содержимое и управлять отображением.
+// Обработка нажатий клавиш
+// Функция onDocumentKeydown обрабатывает нажатия клавиш и закрывает модальное окно при нажатии клавиш Escape или Enter.
+// Отображение модального окна
+// Функция renderModal устанавливает содержимое модального окна, включая изображение, описание, количество лайков и комментарии.
+// Показ модального окна
+// Функция showModal делает модальное окно видимым и блокирует прокрутку страницы.
+// Открытие модального окна
+// Функция openModal открывает модальное окно, устанавливает локальные комментарии и добавляет обработчики событий для загрузки дополнительных комментариев и закрытия окна.
+// Закрытие модального окна
+// Функция closeModal скрывает модальное окно и удаляет все обработчики событий, чтобы избежать утечек памяти.
+// Обработка событий закрытия
 // Функции onClosePhotoKeydown и onClosePhotoClick обрабатывают закрытие модального окна при нажатии клавиши Enter или клике вне изображения.
 
 //* Импорт функций
@@ -24,20 +20,25 @@
 // Эти функции определяют, была ли нажата клавиша Escape или Enter соответственно.
 // Это позволяет обрабатывать нажатия клавиш для закрытия модального окна.
 import { isEscapeKey, isEnterKey } from './util.js';
+// импортируем три функции из модуля comments.js.
+// renderComments: Эта функция отвечает за отображение комментариев в модальном окне. Она может принимать данные о комментариях и динамически создавать элементы DOM для их отображения. Например, она может добавлять комментарии в список, который находится в модальном окне.
+// loadMoreComments: Эта функция используется для загрузки дополнительных комментариев, когда пользователь нажимает кнопку "Загрузить больше комментариев". Она может извлекать следующие комментарии из массива локальных комментариев или из какого-то внешнего источника (например, сервера) и добавлять их в отображение.
+// setLocalComments: Эта функция используется для установки или обновления списка локальных комментариев. Она может принимать массив комментариев и сохранять его в переменной, чтобы другие функции могли использовать эти данные для отображения или обработки.
+import { renderComments, loadMoreComments, setLocalComments } from './comments.js';
 
 // Получаем элементы модального окна
 // Сохраняем ссылки на различные элементы модального окна, такие как изображение, описание, количество лайков и комментариев, а также кнопку закрытия.
-const bigPicture = document.querySelector('.big-picture');
-const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
-const socialCaption = bigPicture.querySelector('.social__caption');
-const socialHeader = bigPicture.querySelector('.social__header');
-const socialHeaderPicture = socialHeader.querySelector('.social__picture');
-const likesCount = bigPicture.querySelector('.likes-count');
-const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
-const socialCommentsTemplate = bigPicture.querySelector('.social__comment');
-const socialComments = bigPicture.querySelector('.social__comments');
-const commentCount = bigPicture.querySelector('.social__comment-count');
-const commentsLoader = bigPicture.querySelector('.comments-loader');
+const bigPicture = document.querySelector('.big-picture'); // Модальное окно
+const bigPictureImg = bigPicture.querySelector('.big-picture__img img'); // Изображение в модальном окне
+const socialCaption = bigPicture.querySelector('.social__caption'); // Описание изображения
+const socialHeader = bigPicture.querySelector('.social__header'); // Заголовок с информацией о пользователе
+const socialHeaderPicture = socialHeader.querySelector('.social__picture'); // Аватар пользователя
+const likesCount = bigPicture.querySelector('.likes-count'); // Количество лайков
+const bigPictureClose = bigPicture.querySelector('.big-picture__cancel'); // Кнопка закрытия модального окна
+const socialCommentsTemplate = bigPicture.querySelector('.social__comment'); // Шаблон комментария
+const socialComments = bigPicture.querySelector('.social__comments'); // Список комментариев
+const commentCount = bigPicture.querySelector('.social__comment-count'); // Количество комментариев
+const commentsLoader = bigPicture.querySelector('.comments-loader'); // Кнопка загрузки дополнительных комментариев
 
 let localComments; // Переменная для хранения локальных комментариев
 let currentCommentIndex = 0; // Индекс текущего комментария
@@ -53,46 +54,13 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-//* Создание комментариев
-// Функция createComment создает элемент комментария, клонируя шаблон и заполняя его данными (аватар, имя, сообщение).
-const createComment = ({ avatar, name, message }) => {
-  const socialCommentElement = socialCommentsTemplate.cloneNode(true); // Клонируем шаблон комментария
-  const socialCommentAvatar = socialCommentElement.querySelector('.social__picture'); // Получаем элемент аватара
-  socialCommentAvatar.src = avatar; // Устанавливаем источник аватара
-  socialCommentAvatar.alt = name; // Устанавливаем альтернативный текст для аватара
-  socialCommentElement.querySelector('.social__text').textContent = message; // Устанавливаем текст сообщения
-  return socialCommentElement; // Возвращаем созданный элемент комментария
-};
-
-//* Отображение комментариев
-// Функция renderComments отвечает за отображение всех комментариев, создавая их с помощью createComment и добавляя в контейнер.
-const renderComments = () => {
-  const fragment = document.createDocumentFragment(); // Создаем фрагмент документа для оптимизации рендеринга
-  const commentsToShow = localComments.slice(currentCommentIndex, currentCommentIndex + commentsPerPage); // Получаем комментарии для отображения
-
-  commentsToShow.forEach((comment) => {
-    fragment.append(createComment(comment)); // Добавляем каждый комментарий во фрагмент
-  });
-
-  socialComments.append(fragment); // Вставляем новые комментарии в конец списка
-
-  const shownCount = currentCommentIndex + commentsToShow.length; // Подсчитываем количество показанных комментариев
-  commentCount.querySelector('.social__comment-shown-count').textContent = shownCount; // Обновляем счетчик показанных комментариев
-  commentCount.querySelector('.social__comment-total-count').textContent = localComments.length; // Обновляем общий счетчик комментариев
-
-  // Если показано больше или равно количеству комментариев, скрываем кнопку загрузки
-  if (shownCount >= localComments.length) {
-    commentsLoader.classList.add('hidden');
+// Функция для управления видимостью кнопки загрузки комментариев
+const toggleCommentsLoaderVisibility = (shownCount, totalComments) => {
+  if (shownCount >= totalComments) {
+    commentsLoader.classList.add('hidden'); // Скрываем кнопку, если все комментарии загружены
   } else {
-    commentsLoader.classList.remove('hidden');
+    commentsLoader.classList.remove('hidden'); // Показываем кнопку, если есть еще комментарии для загрузки
   }
-};
-
-//* Загрузка дополнительных комментариев
-// Функция loadMoreComments увеличивает индекс текущего комментария и вызывает renderComments для отображения новых комментариев.
-const loadMoreComments = () => {
-  currentCommentIndex += commentsPerPage; // Увеличиваем индекс текущего комментария
-  renderComments(); // Отображаем новые комментарии
 };
 
 //* Отображение модального окна
@@ -121,15 +89,15 @@ const showModal = () => {
 //* Открытие модального окна
 // Функция openModal открывает модальное окно, копируя комментарии и добавляя обработчики событий для закрытия окна.
 export const openModal = (photo) => {
-  localComments = [...photo.comments]; // Копируем комментарии из объекта photo
+  setLocalComments([...photo.comments]); // Устанавливаем локальные комментарии
   renderModal({
-    url: photo.url, // URL фотографии
-    description: photo.description, // Описание фотографии
-    likes: photo.likes, // Количество лайков
-    avatar: photo.avatar, // URL аватара
-    avatarAlt: photo.avatarAlt // Альтернативный текст для аватара
+    url: photo.url,
+    description: photo.description,
+    likes: photo.likes,
+    avatar: photo.avatar,
+    avatarAlt: photo.avatarAlt
   });
-  showModal(); // Показываем модальное окно
+  showModal();
 
   // Добавляем обработчики событий для загрузки дополнительных комментариев и закрытия окна
   commentsLoader.addEventListener('click', loadMoreComments);
@@ -148,7 +116,6 @@ const closeModal = () => {
   // Удаляем обработчики событий
   document.removeEventListener('keydown', onDocumentKeydown);
   bigPictureClose.removeEventListener('click', closeModal);
-  bigPictureClose.removeEventListener('keydown', onClosePhotoKeydown);
   bigPicture.removeEventListener('click', onClosePhotoClick);
 };
 
