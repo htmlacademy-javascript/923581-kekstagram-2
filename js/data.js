@@ -56,4 +56,4 @@ const generatePhotos = () => {
 };
 
 // Экспортируем функции для использования в других модулях
-export { generatePhotos, generateComments, DISCRIPTIONS };
+export { generatePhotos };

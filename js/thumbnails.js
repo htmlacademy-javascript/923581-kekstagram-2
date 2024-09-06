@@ -7,7 +7,7 @@
 //*7 Экспорт функции: В конце кода экспортируется функция renderCards, чтобы она могла быть использована в других модулях приложения.
 
 // Импортируем функцию openModal из модуля photo-modal.js
-import { openModal } from "./photo-modal.js"; // Импортируем функцию openModal, которая отвечает за открытие модального окна с фотографией.
+import { openModal } from './photo-modal.js'; // Импортируем функцию openModal, которая отвечает за открытие модального окна с фотографией.
 
 // Находим шаблон для миниатюры фотографии в HTML
 const template = document.querySelector('#picture').content.querySelector('.picture');
