@@ -94,3 +94,4 @@ container.addEventListener('click', (evt) => {
 
 // Экспортируем функцию renderCards для использования в других модулях
 export { renderCards }; // Экспортируем функцию renderCards, чтобы она могла быть использована в других частях приложения.
+

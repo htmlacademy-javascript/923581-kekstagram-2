@@ -55,5 +55,7 @@ const generatePhotos = () => {
   return photos; // Возвращаем массив с фотографиями
 };
 
+
 // Экспортируем функции для использования в других модулях
 export { generatePhotos };
+
