@@ -1,3 +1,5 @@
+
+import { closeModal } from './photo-modal.js';
 /*Функция для проверки длины строки.*/
 /**
  *
@@ -21,5 +23,14 @@ const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
 const isEscapeKey = (evt) => evt.key === 'Escape';
 const isEnterKey = (evt) => evt.key === 'Enter';
 
+// Обработка нажатий клавиш
+// Функция onDocumentKeydown обрабатывает нажатия клавиш и закрывает модальное окно при нажатии клавиш Escape или Enter.
+function onDocumentKeydown(evt) {
+  if (isEscapeKey(evt) || isEnterKey(evt)) { // Проверяем, нажата ли клавиша Escape или Enter
+    evt.preventDefault(); // Предотвращаем действие по умолчанию
+    closeModal(); // Закрываем модальное окно
+  }
+};
 
-export { getRandomInt, getRandomElement, checkStringLength, isEscapeKey, isEnterKey };
+
+export { getRandomInt, getRandomElement, checkStringLength, isEnterKey, onDocumentKeydown };
