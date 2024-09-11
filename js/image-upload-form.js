@@ -21,7 +21,7 @@ function onDocumentKeydown(evt) {
 const showImageEditingForm = () => {
   uploadFileStart.addEventListener('change', () => {
     imageEditingForm.classList.remove('hidden'); // Убираем класс 'hidden', чтобы показать модальное окно
-    document.body.classList.add('modal-open'); // Блокируем прокрутку страницы
+    pageBody.classList.add('modal-open'); // Блокируем прокрутку страницы
     imageEditingFormClose.tabIndex = 2; // Устанавливаем tabindex для кнопки закрытия
     imageEditingForm.tabIndex = 1; // Устанавливаем tabindex для модального окна
     imageEditingForm.focus(); // Устанавливаем фокус на модальное окно
@@ -36,7 +36,7 @@ const showImageEditingForm = () => {
 // Закрытие модального окна
 function closeImageEditingForm() {
   imageEditingForm.classList.add('hidden'); // Добавляем класс 'hidden', чтобы скрыть модальное окно
-  document.body.classList.remove('modal-open'); // Разрешаем прокрутку страницы
+  pageBody.classList.remove('modal-open'); // Разрешаем прокрутку страницы
 
   // Удаляем обработчики событий
   document.removeEventListener('keydown', onDocumentKeydown);
