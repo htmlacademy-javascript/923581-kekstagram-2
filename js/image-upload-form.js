@@ -67,5 +67,6 @@ export { showImageEditingForm };
 9:12 - upload - file
 13:58 - Обработка нажатий клавиш - Функция onDocumentKeydown
 15:36 - Напишите код для валидации формы добавления изображения, используя библиотеку Pristine
+18:07 - подключение Pristine.JS
 
 */
