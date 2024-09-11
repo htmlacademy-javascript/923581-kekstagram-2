@@ -42,6 +42,9 @@ const showModal = () => {
   bigPictureClose.tabIndex = 2; // Устанавливаем tabindex для кнопки закрытия
   bigPicture.tabIndex = 1; // Устанавливаем tabindex для модального окна
   bigPicture.focus(); // Устанавливаем фокус на модальное окно
+
+  document.addEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
+
 };
 
 // Открытие модального окна
@@ -63,11 +66,13 @@ export const openModal = (photo) => {
 const closeModal = () => {
   bigPicture.classList.add('hidden'); // Добавляем класс 'hidden', чтобы скрыть модальное окно
   document.body.classList.remove('modal-open'); // Разрешаем прокрутку страницы
+
+  document.removeEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
 };
 
 // Обработка нажатий клавиш
 // Функция onDocumentKeydown обрабатывает нажатия клавиш и закрывает модальное окно при нажатии клавиш Escape или Enter.
-const onDocumentKeydown = (evt) => {
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt) || isEnterKey(evt)) { // Проверяем, нажата ли клавиша Escape или Enter
     evt.preventDefault(); // Предотвращаем действие по умолчанию
     closeModal(); // Закрываем модальное окно
@@ -91,7 +96,6 @@ const onClosePhotoKeydown = (evt) => {
 
 // Добавляем обработчики событий для загрузки дополнительных комментариев и закрытия окна
 commentsLoader.addEventListener('click', loadMoreComments); // Обработчик для загрузки дополнительных комментариев
-document.addEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
 bigPictureClose.addEventListener('click', closeModal); // Обработчик для кнопки закрытия
 bigPictureClose.addEventListener('keydown', onClosePhotoKeydown); // Обработчик для нажатия клавиши Enter на кнопке закрытия
 bigPicture.addEventListener('click', onClosePhotoClick); // Обработчик для клика вне изображения
