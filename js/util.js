@@ -33,4 +33,4 @@ function onDocumentKeydown(evt) {
 };
 
 
-export { getRandomInt, getRandomElement, checkStringLength, isEnterKey, onDocumentKeydown };
+export { getRandomInt, getRandomElement, checkStringLength, isEnterKey, isEscapeKey, onDocumentKeydown };
