@@ -6,6 +6,8 @@ const pageBody = document.querySelector('body');
 const uploadFileStart = uploadForm.querySelector('#upload-file');
 const imageEditingForm = uploadForm.querySelector('.img-upload__overlay');
 const imageEditingFormClose = imageEditingForm.querySelector('#upload-cancel'); // Кнопка закрытия модального окна
+const hashtagInput = uploadForm.querySelector('.text__hashtags');
+const descriptionInput = uploadForm.querySelector('.text__description');
 
 const btnClick = () => {
   closeImageEditingForm();
@@ -59,7 +61,23 @@ imageEditingForm.addEventListener('keydown', (evt) => {
   }
 });
 
+
+const pristine = new Pristine(uploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--error',
+  errorTextParent: 'img-upload__field-wrapper',
+});
+pristine.addValidator(hashtagInput, (value) => {
+  const hasNumber = /\d/.test(value);
+  console.log(hasNumber, value);
+  return !hasNumber;
+}, 'Здесь ошибка');
+
+
+
+
 export { showImageEditingForm };
+
 
 /* 9.16.Открытое занятие.Внешние API и сторонние библиотеки
 
@@ -68,5 +86,14 @@ export { showImageEditingForm };
 13:58 - Обработка нажатий клавиш - Функция onDocumentKeydown
 15:36 - Напишите код для валидации формы добавления изображения, используя библиотеку Pristine
 18:07 - подключение Pristine.JS
+48:47 - валидация длины комментария
+52:18 - сообщение об ошибке isHashtagsVal id
+55:15 - правила написания хэштега (ошибка)
+57:20 - функция подбора слова зависимости окончания
+1:02 - запрет на закрытие формы когда стоит фокус на инпуте
+1:03 - более надёжная проверка  закрытия формы
+1:04 - Реализуйте логику проверки так, чтобы, как минимум, она срабатывала при попытке отправить форму и не давала этого сделать, если форма заполнена не по правилам. При желании, реализуйте проверки сразу при вводе значения в поле.
+1:06 - второе задание 9.15. Помощь друга
+
 
 */
