@@ -74,14 +74,21 @@ pristine.addValidator(hashtagInput, (value) => {
   const trimmedValue = value.trim().replace(/\s+/g, ' ');
   const hashtags = trimmedValue.split(' ').filter(Boolean); // Разделяем по пробелам и убираем пустые значения
 
-  if (hashtags.length > 5) return false; // Проверка на количество хэштегов
+  // Проверка на количество хэштегов
+  if (hashtags.length > 5) {
+    return 'Нельзя указать больше пяти хэштегов.';
+  }
 
   const uniqueHashtags = new Set();
   for (let hashtag of hashtags) {
     if (!/^#[A-Za-z0-9]+$/.test(hashtag)) return false; // Проверка на корректный формат
     if (hashtag.length > 20) return false; // Проверка на максимальную длину
-    if (uniqueHashtags.has(hashtag.toLowerCase())) return false; // Проверка на уникальность
-    uniqueHashtags.add(hashtag.toLowerCase());
+    // Проверка на уникальность
+    const lowerCaseHashtag = hashtag.toLowerCase();
+    if (uniqueHashtags.has(lowerCaseHashtag)) {
+      return 'Один и тот же хэштег не может быть использован дважды.';
+    }
+    uniqueHashtags.add(lowerCaseHashtag);
   }
 
   return true; // Все проверки пройдены
