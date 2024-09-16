@@ -20,7 +20,7 @@ const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) +
 const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
 
 // оформляем проверку нажатой клавиши в утилитарную функцию
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 const isEnterKey = (evt) => evt.key === 'Enter';
 
 // Обработка нажатий клавиш

@@ -90,3 +90,4 @@ pristine.addValidator(hashtagInput, isHashtagsValid, error, 2, false);
 // Экспорт функций валидации
 export const isValid = () => pristine.validate();
 export const reset = () => pristine.reset();
+export { hashtagInput, descriptionInput };
