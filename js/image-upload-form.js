@@ -26,15 +26,14 @@ let currentScale = 1; // Текущий масштаб
 
 // Инициализация библиотеки Pristine для валидации формы
 const pristine = new Pristine(uploadForm, {
-  classTo: 'img-upload__form',
+  classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
 // Валидатор для проверки длины комментария
-const isDescriptionValid = (value) => {
-  return value.length <= 140; // Проверка на максимальную длину комментария
-};
+const isDescriptionValid = (value) => value.length <= 140; // Проверка на максимальную длину комментария
+
 
 const btnClick = () => {
   onPhotoSelect(); // Выбор фотографии
@@ -75,8 +74,6 @@ const onDocumentKeydown = (evt) => {
   }
 }
 
-// Добавление валидатора для описания
-pristine.addValidator(descriptionInput, isDescriptionValid, 'Длина комментария не может превышать 140 символов', 2, false);
 
 function onImageEditingFormClose() {
   document.body.classList.remove('modal-open'); // Убираем класс, блокирующий прокрутку страницы
@@ -144,28 +141,32 @@ effectsList.addEventListener('change', () => {
   resetScaleOnEffectChange();
 });
 
-const onHashtagInput = () => {
-  isHashtagsValid(hashtagInput.value);
-};
+// const onHashtagInput = () => {
+//   isHashtagsValid(hashtagInput.value);
+// };
 
 const onFormSubmit = (evt) => {
-  evt.preventDefault();
+  // evt.preventDefault();
 
-  if (pristine.validate()) {
-    hashtagInput.value = hashtagInput.value.trim().replace(/\s+/g, ' ');
-    uploadForm.submit();
+  if (!pristine.validate()) {
+    // hashtagInput.value = hashtagInput.value.trim().replace(/\s+/g, ' ');
+    // uploadForm.submit();
+    evt.preventDefault();
   }
 };
 
 // Валидация хэштегов с использованием Pristine
 pristine.addValidator(hashtagInput, isHashtagsValid, error, 2, false);
 
+// Добавление валидатора для описания
+pristine.addValidator(descriptionInput, isDescriptionValid, 'Длина комментария не может превышать 140 символов', 2, false);
+
 // Добавляем обработчики событий на элементы формы и кнопки управления масштабом
 uploadFileStart.addEventListener('change', onPhotoSelect);
 scaleControlSmaller.addEventListener('click', onSmallerClick);
 scaleControlBigger.addEventListener('click', onBiggerClick);
 // effectsList.addEventListener('change', onEffectChange);
-hashtagInput.addEventListener('input', onHashtagInput);
+// hashtagInput.addEventListener('input', onHashtagInput);
 uploadForm.addEventListener('submit', onFormSubmit);
 
 // export { imageEditingFormClose };
