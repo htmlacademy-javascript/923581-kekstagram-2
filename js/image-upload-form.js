@@ -1,104 +1,142 @@
-import { onDocumentKeydown } from './util.js';
+import { isEscapeKey, isEnterKey } from './util.js';
 // import { onEffectChange } from './effects-slider.js';
 import { error, isHashtagsValid } from './hashtag-validation.js';
 
-const SCALE_STEP = 6.25;
-const imgUploadForm = document.querySelector('.img-upload__form');
-const uploadOverlay = document.querySelector('.img-upload__overlay');
-const uploadFile = imgUploadForm.querySelector('#upload-file');
-const imgUploadCancel = imgUploadForm.querySelector('#upload-cancel');
-const smaller = imgUploadForm.querySelector('.scale__control--smaller');
-const bigger = imgUploadForm.querySelector('.scale__control--bigger');
-const img = imgUploadForm.querySelector('.img-upload__preview');
-const scaleControl = imgUploadForm.querySelector('.scale__control--value');
-const effectLevel = imgUploadForm.querySelector('.img-upload__effect-level');
-const effectsList = imgUploadForm.querySelector('.effects__list');
-const inputHashtag = imgUploadForm.querySelector('.text__hashtags');
-const inputDescription = imgUploadForm.querySelector('.text__description');
+const SCALE_STEP = 6.25; // Шаг изменения масштаба
+const uploadForm = document.querySelector('.img-upload__form'); // Форма загрузки изображения
+const imageEditingForm = document.querySelector('.img-upload__overlay'); // Модальное окно редактирования изображения
+const uploadFileStart = uploadForm.querySelector('#upload-file'); // Поле для загрузки файла
+const imageEditingFormClose = uploadForm.querySelector('#upload-cancel'); // Кнопка закрытия модального окна
+const scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller'); // Кнопка уменьшения масштаба
+const scaleControlBigger = uploadForm.querySelector('.scale__control--bigger'); // Кнопка увеличения масштаба
+const previewImage = uploadForm.querySelector('.img-upload__preview'); // Предпросмотр загружаемого изображения
+const scaleControlValue = uploadForm.querySelector('.scale__control--value'); // Элемент для отображения значения масштаба
+const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level'); // Элемент уровня эффекта
+const effectsList = uploadForm.querySelector('.effects__list'); // Список эффектов
+const hashtagInput = uploadForm.querySelector('.text__hashtags'); // Поле для ввода хэштегов
+const descriptionInput = uploadForm.querySelector('.text__description'); // Поле для ввода описания
 
-// Скрытое поле для отправки значения масштаба
+// Скрытое поле для хранения значения масштаба
 const hiddenScaleInput = document.createElement('input');
 hiddenScaleInput.type = 'hidden';
 hiddenScaleInput.name = 'scale';
-imgUploadForm.appendChild(hiddenScaleInput);
+uploadForm.appendChild(hiddenScaleInput); // Добавляем скрытое поле в форму
 
-let scale = 1;
+let currentScale = 1; // Текущий масштаб
 
-const pristine = new Pristine(imgUploadForm, {
+// Инициализация библиотеки Pristine для валидации формы
+const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__form',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
-// Функция проверки длины комментария
+// Валидатор для проверки длины комментария
 const isDescriptionValid = (value) => {
-  return value.length <= 140; // Проверка на максимальную длину
+  return value.length <= 140; // Проверка на максимальную длину комментария
 };
 
 const btnClick = () => {
-  onPhotoSelect();
+  onPhotoSelect(); // Выбор фотографии
 };
 
-// Добавление валидатора для описания
-pristine.addValidator(inputDescription, isDescriptionValid, 'Длина комментария не может превышать 140 символов', 2, false);
+// function onDocumentKeydown(evt) {
+//   // Проверяем, нажата ли клавиша Escape
+//   if (isEscapeKey(evt)) {
+//     evt.preventDefault(); // Предотвращаем действие по умолчанию
+//     onImageEditingFormClose(); // Закрываем модальное окно
+//   }
+// }
 
-function onImgUploadClose() {
-  document.body.classList.remove('modal-open');
-  uploadOverlay.classList.add('hidden');
-  imgUploadCancel.tabIndex = 2; // Устанавливаем tabindex для кнопки закрытия
-  uploadOverlay.tabIndex = 1; // Устанавливаем tabindex для модального окна
-  uploadOverlay.focus(); // Устанавливаем фокус на модальное окно
-  scale = 1;
-  updateScale();
-  effectLevel.classList.add('hidden');
-  img.style.filter = 'none';
-  imgUploadForm.reset();
+// const onDocumentKeydown = (evt) => {
+//   if (isEscapeKey(evt)) { // Проверяем, нажата ли клавиша Escape
+//     evt.preventDefault(); // Предотвращаем действие по умолчанию
+//     if (document.activeElement === hashtagInput || document.activeElement === descriptionInput) { // Проверяем, есть ли активный элемент
+//       evt.stopPropagation(); // Останавливаем дальнейшую обработку события
+//     }
+//   } else {
+//     uploadForm.reset(); // Сбрасываем форму загрузки
+//     onImageEditingFormClose(); // Закрываем форму редактирования изображения
+//   }
+// }
 
-  // Удаляем обработчики событий
-  document.removeEventListener('keydown', onDocumentKeydown);
-  document.removeEventListener('click', onOutsideClick);
-};
-
-
-function onOutsideClick(evt) {
-  if (!uploadOverlay.contains(evt.target)) { // Проверяем, был ли клик вне области формы
-    onImgUploadClose();
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt)) { // Проверяем, нажата ли клавиша Escape
+    evt.preventDefault(); // Предотвращаем действие по умолчанию
+    // Проверяем, является ли активный элемент одним из целевых полей ввода
+    if (document.activeElement === hashtagInput || document.activeElement === descriptionInput) {
+      evt.stopPropagation(); // Останавливаем дальнейшую обработку события
+    } else {
+      // Если активный элемент не является целевым полем ввода,
+      // можно выполнить дополнительные действия или просто ничего не делать
+      uploadForm.reset(); // Сбрасываем форму загрузки
+      onImageEditingFormClose(); // Закрываем форму редактирования изображения
+    }
   }
 }
 
-const onPhotoSelect = () => {
-  document.body.classList.add('modal-open');
-  uploadOverlay.classList.remove('hidden');
+// Добавление валидатора для описания
+pristine.addValidator(descriptionInput, isDescriptionValid, 'Длина комментария не может превышать 140 символов', 2, false);
 
-  // Добавляем обработчики событий
-  imgUploadCancel.addEventListener('click', onImgUploadClose);
+function onImageEditingFormClose() {
+  document.body.classList.remove('modal-open'); // Убираем класс, блокирующий прокрутку страницы
+  imageEditingForm.classList.add('hidden'); // Скрываем модальное окно редактирования изображения
+  imageEditingFormClose.tabIndex = 2; // Устанавливаем tabindex для кнопки закрытия
+  imageEditingForm.tabIndex = 1; // Устанавливаем tabindex для модального окна
+  imageEditingForm.focus(); // Устанавливаем фокус на модальное окно
+  currentScale = 1; // Сбрасываем масштаб
+  updateScale(); // Обновляем масштаб изображения
+  effectLevelControl.classList.add('hidden'); // Скрываем уровень эффекта
+  previewImage.style.filter = 'none'; // Убираем фильтр с изображения
+  uploadForm.reset(); // Сбрасываем форму
 
-  document.addEventListener('keydown', onDocumentKeydown); // Используем общий обработчик для всех клавиш
-  document.addEventListener('click', onOutsideClick); // Добавляем обработчик клика вне формы
-};
+  // Удаляем обработчики событий
+  document.removeEventListener('keydown', onDocumentKeydown);
+  imageEditingFormClose.removeEventListener('click', btnClick);
+  document.removeEventListener('click', onOutsideClick);
+}
 
-const updateScale = () => {
-  img.style.transform = `scale(${scale})`;
-  scaleControl.value = `${scale * 100}%`;
-  hiddenScaleInput.value = scale; // Обновление скрытого поля с масштабом
-};
-
-const onSmallerClick = () => {
-  if (scale > SCALE_STEP) {
-    scale -= SCALE_STEP;
-    updateScale();
+function onOutsideClick(evt) {
+  // Проверяем, был ли клик вне области модального окна
+  if (evt.target === imageEditingForm) {
+    // console.log('Клик вне модального окна'); // Для отладки
+    onImageEditingFormClose(); // Закрываем модальное окно
   }
 };
 
+const onPhotoSelect = () => {
+  document.body.classList.add('modal-open'); // Блокируем прокрутку страницы при открытии модального окна
+  imageEditingForm.classList.remove('hidden'); // Показываем модальное окно редактирования
+
+  // Добавляем обработчики событий для закрытия окна и нажатия клавиш
+  imageEditingFormClose.addEventListener('click', onImageEditingFormClose);
+  document.addEventListener('keydown', onDocumentKeydown);
+  imageEditingFormClose.addEventListener('click', btnClick);
+  document.addEventListener('click', onOutsideClick); // Обработчик для клика вне области
+};
+
+const updateScale = () => {
+  previewImage.style.transform = `scale(${currentScale})`; // Обновляем масштаб изображения в зависимости от текущего значения
+  scaleControlValue.value = `${currentScale * 100}%`; // Обновляем отображение значения масштаба
+  hiddenScaleInput.value = currentScale; // Обновляем скрытое поле с масштабом
+};
+
+const onSmallerClick = () => {
+  if (currentScale > SCALE_STEP) {
+    currentScale -= SCALE_STEP;
+    updateScale();
+  }
+}
+
 const onBiggerClick = () => {
-  if (scale < 1) {
-    scale += SCALE_STEP;
+  if (currentScale < 1) {
+    currentScale += SCALE_STEP;
     updateScale();
   }
 };
 
 const resetScaleOnEffectChange = () => {
-  scale = 1; // Сброс масштаба при смене эффекта
+  currentScale = 1; // Сброс масштаба при смене эффекта
   updateScale();
 };
 
@@ -107,28 +145,30 @@ effectsList.addEventListener('change', () => {
 });
 
 const onHashtagInput = () => {
-  isHashtagsValid(inputHashtag.value);
+  isHashtagsValid(hashtagInput.value);
 };
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
 
   if (pristine.validate()) {
-    inputHashtag.value = inputHashtag.value.trim().replace(/\s+/g, ' ');
-    imgUploadForm.submit();
+    hashtagInput.value = hashtagInput.value.trim().replace(/\s+/g, ' ');
+    uploadForm.submit();
   }
 };
 
-pristine.addValidator(inputHashtag, isHashtagsValid, error, 2, false);
+// Валидация хэштегов с использованием Pristine
+pristine.addValidator(hashtagInput, isHashtagsValid, error, 2, false);
 
-uploadFile.addEventListener('change', onPhotoSelect);
-smaller.addEventListener('click', onSmallerClick);
-bigger.addEventListener('click', onBiggerClick);
+// Добавляем обработчики событий на элементы формы и кнопки управления масштабом
+uploadFileStart.addEventListener('change', onPhotoSelect);
+scaleControlSmaller.addEventListener('click', onSmallerClick);
+scaleControlBigger.addEventListener('click', onBiggerClick);
 // effectsList.addEventListener('change', onEffectChange);
-inputHashtag.addEventListener('input', onHashtagInput);
-imgUploadForm.addEventListener('submit', onFormSubmit);
+hashtagInput.addEventListener('input', onHashtagInput);
+uploadForm.addEventListener('submit', onFormSubmit);
 
-// export { showImageEditingForm };
+// export { imageEditingFormClose };
 
 
 /* 9.16.Открытое занятие.Внешние API и сторонние библиотеки
@@ -143,9 +183,27 @@ imgUploadForm.addEventListener('submit', onFormSubmit);
 55:15 - правила написания хэштега (ошибка)
 57:20 - функция подбора слова зависимости окончания
 1:02 - запрет на закрытие формы когда стоит фокус на инпуте
-1:03 - более надёжная проверка  закрытия формы
+1:03 - более надёжная проверка  закрытия формы onDocumentKeydown
 1:04 - Реализуйте логику проверки так, чтобы, как минимум, она срабатывала при попытке отправить форму и не давала этого сделать, если форма заполнена не по правилам. При желании, реализуйте проверки сразу при вводе значения в поле.
 1:06 - второе задание 9.15. Помощь друга
 
 
 */
+
+
+// const onDocumentKeydown = (evt): void => {
+//   if (isEscapeKey(evt)) { // Исправлено название функции
+//     evt.preventDefault(); // Исправлено название метода
+//     if (document.activeElement) { // Добавлены отсутствующие фигурные скобки
+//       evt.stopPropagation(); // Убедитесь, что этот метод вызывается правильно
+//     }
+//   } else {
+//     uploadForm.reset();
+//     closePhotoEditor();
+//   }
+// }
+
+// // Предполагается, что hashtagInput определен где-то в вашем коде
+// if (hashtagInput || document.activeElement) {
+//   // Здесь можно добавить дополнительную логику, если необходимо
+// }
