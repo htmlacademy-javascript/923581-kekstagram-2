@@ -33,7 +33,8 @@ const applyEffect = (imgElement, effect) => {
 
 // Функция для обработки изменения эффекта
 const onEffectChange = (evt) => {
-  const imgElement = document.querySelector('.img-upload__preview'); // Получаем элемент изображения
+  const imgElement = document.querySelector('.img-upload__preview img'); // Получаем элемент изображения
+  const effectLevelInput = document.querySelector('.effect-level__value'); // Получаем элемент уровня эффекта
 
   if (!imgElement) return; // Проверяем наличие элемента
 
@@ -42,8 +43,24 @@ const onEffectChange = (evt) => {
   // Применяем выбранный эффект или сбрасываем фильтр, если эффект не найден
   if (effects[selectedEffect]) {
     applyEffect(imgElement, effects[selectedEffect]);
+
+    // Сбрасываем уровень эффекта до начального состояния (например, до 100)
+    effectLevelInput.value = 100; // Установите нужное начальное значение для выбранного эффекта
+    updateSliderValue(100); // Обновляем значение слайдера
   } else {
     applyEffect(imgElement, effects.none);
+
+    // Сбрасываем уровень эффекта до начального состояния
+    effectLevelInput.value = 0; // Установите нужное начальное значение для отсутствия эффекта
+    updateSliderValue(0); // Обновляем значение слайдера
+  }
+};
+
+// Функция для обновления значения слайдера
+const updateSliderValue = (value) => {
+  const sliderElement = document.querySelector('.effect-level__slider'); // Получаем элемент слайдера
+  if (sliderElement) {
+    sliderElement.noUiSlider.set(value); // Устанавливаем новое значение на слайдере
   }
 };
 
@@ -62,9 +79,11 @@ document.querySelector('.img-upload__form').appendChild(hiddenScaleInput); // Д
 
 // Обновление масштаба изображения и скрытого поля
 const updateScale = () => {
-  const previewImage = document.querySelector('.img-upload__preview'); // Получаем элемент предпросмотра изображения
+  const imgElement = document.querySelector('.img-upload__preview img'); // Получаем элемент изображения
 
-  previewImage.style.transform = `scale(${currentScale})`;
+  if (imgElement) {
+    imgElement.style.transform = `scale(${currentScale})`; // Применяем масштаб к изображению
+  }
 
   const scaleControlValue = document.querySelector('.scale__control--value'); // Элемент для отображения значения масштаба
 
