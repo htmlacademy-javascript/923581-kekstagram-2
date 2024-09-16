@@ -1,3 +1,5 @@
+import { numDecline } from './util.js';
+
 const MAX_HASHTAGS = 5; // Максимальное количество хэштегов
 const MAX_SYMBOLS = 20; // Максимальная длина одного хэштега
 
@@ -8,9 +10,9 @@ const isHashtagsValid = (value) => {
   errorMessage = ''; // Сброс сообщения об ошибке
   const inputText = value.toLowerCase().trim(); // Приведение текста к нижнему регистру и удаление пробелов
 
-  // Проверка на пустой ввод
+  // Если ввод пустой, считаем его валидным
   if (!inputText) {
-    return true; // Если ввод пустой, считаем его валидным
+    return true;
   }
 
   const inputArray = inputText.split(/\s+/); // Разделение текста на массив хэштегов
@@ -29,7 +31,11 @@ const isHashtagsValid = (value) => {
       error: 'Каждый хэштег должен начинаться с символа \'#\'',
     },
     {
-      check: inputArray.some((item, num, array) => array.indexOf(item) !== num), // Проверка на дубликаты
+      check: inputArray.some((item) => item.length === 1), // Проверка, что хэштег не состоит только из одного символа '#'
+      error: 'Хэштег не может состоять только из одного символа \'#\'',
+    },
+    {
+      check: new Set(inputArray).size !== inputArray.length, // Проверка на дубликаты
       error: 'Хэштеги не могут повторяться',
     },
     {
@@ -38,11 +44,11 @@ const isHashtagsValid = (value) => {
     },
     {
       check: inputArray.length > MAX_HASHTAGS, // Проверка на количество хэштегов
-      error: `Нельзя использовать больше ${MAX_HASHTAGS} хэштегов`,
+      error: `Нельзя использовать больше ${MAX_HASHTAGS} ${numDecline(MAX_HASHTAGS, 'хештега', 'хештегов', 'хештегов')}`,
     },
     {
       check: inputArray.some((item) => !/^#[a-zA-Z0-9éА-Яа-яЁё]{1,19}$/i.test(item)), // Проверка формата хэштегов с поддержкой кириллицы
-      error: 'Некорректный формат хэштега',
+      error: 'Хэштег содержит недопустимые символы',
     },
   ];
 
@@ -56,3 +62,6 @@ const isHashtagsValid = (value) => {
 };
 
 export { error, isHashtagsValid }; // Экспортируем функции
+
+
+// #ddd #dgdd #ddjd #dedd #ddkd #dsdd
