@@ -67,11 +67,30 @@ const pristine = new Pristine(uploadForm, {
   errorClass: 'img-upload__field-wrapper--error',
   errorTextParent: 'img-upload__field-wrapper',
 });
+
+// Проверка хэштегов
 pristine.addValidator(hashtagInput, (value) => {
-  const hasNumber = /\d/.test(value);
-  console.log(hasNumber, value);
-  return !hasNumber;
-}, 'Здесь ошибка');
+  // Удаляем лишние пробелы в начале и конце строки и заменяем множественные пробелы на один
+  const trimmedValue = value.trim().replace(/\s+/g, ' ');
+  const hashtags = trimmedValue.split(' ').filter(Boolean); // Разделяем по пробелам и убираем пустые значения
+
+  if (hashtags.length > 5) return false; // Проверка на количество хэштегов
+
+  const uniqueHashtags = new Set();
+  for (let hashtag of hashtags) {
+    if (!/^#[A-Za-z0-9]+$/.test(hashtag)) return false; // Проверка на корректный формат
+    if (hashtag.length > 20) return false; // Проверка на максимальную длину
+    if (uniqueHashtags.has(hashtag.toLowerCase())) return false; // Проверка на уникальность
+    uniqueHashtags.add(hashtag.toLowerCase());
+  }
+
+  return true; // Все проверки пройдены
+}, 'Хэштеги должны начинаться с #, содержать только буквы и цифры, быть уникальными и не превышать 20 символов. Пробелы между хэштегами должны быть одиночными.');
+
+// Проверка комментариев
+pristine.addValidator(descriptionInput, (value) => {
+  return value.length <= 140;
+}, 'Комментарий не может превышать 140 символов.');
 
 
 
