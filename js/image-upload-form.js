@@ -95,11 +95,9 @@ pristine.addValidator(hashtagInput, (value) => {
 }, 'Хэштеги должны начинаться с #, содержать только буквы и цифры, быть уникальными и не превышать 20 символов. Пробелы между хэштегами должны быть одиночными.');
 
 // Проверка комментариев
-pristine.addValidator(descriptionInput, (value) => {
-  return value.length <= 140;
-}, 'Комментарий не может превышать 140 символов.');
-
-
+// pristine.addValidator(descriptionInput, (value) => {
+//   return value.length <= 140;
+// }, 'Комментарий не может превышать 140 символов.');
 
 
 export { showImageEditingForm };
