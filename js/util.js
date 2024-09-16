@@ -26,8 +26,11 @@ const isEnterKey = (evt) => evt.key === 'Enter';
 // Обработка нажатий клавиш
 // Функция onDocumentKeydown обрабатывает нажатия клавиш и закрывает модальное окно при нажатии клавиш Escape или Enter.
 function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt) || isEnterKey(evt)) { // Проверяем, нажата ли клавиша Escape или Enter
+  if (isEscapeKey(evt)) { // Проверяем нажатие клавиши Escape
     evt.preventDefault(); // Предотвращаем действие по умолчанию
+    closeModal(); // Закрываем модальное окно
+  } else if (isEnterKey(evt) && document.activeElement === imgUploadCancel) { // Проверяем нажатие клавиши Enter
+    evt.preventDefault();
     closeModal(); // Закрываем модальное окно
   }
 };
