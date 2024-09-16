@@ -109,3 +109,7 @@ const onBiggerClick = () => {
 };
 
 export { onEffectChange, updateScale, onSmallerClick, onBiggerClick };
+
+
+// 9.16. Открытое занятие. Внешние API и сторонние библиотеки
+// 1:24:57
