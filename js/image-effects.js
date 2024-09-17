@@ -1,5 +1,5 @@
 // image-effects.js
-import { updateScale, onSmallerClick, onBiggerClick } from './image-utils.js';
+import { onSmallerClick, onBiggerClick } from './image-utils.js';
 
 // Объект, содержащий эффекты и их соответствующие CSS-фильтры
 const effects = {
@@ -21,7 +21,9 @@ const onEffectChange = (evt) => {
   const imgElement = document.querySelector('.img-upload__preview img');
   const effectLevelInput = document.querySelector('.effect-level__value');
 
-  if (!imgElement) return;
+  if (!imgElement) {
+    return;
+  }
 
   const selectedEffect = evt.target.value;
 
@@ -37,12 +39,12 @@ const onEffectChange = (evt) => {
 };
 
 // Функция для обновления значения слайдера
-const updateSliderValue = (value) => {
+function updateSliderValue(value) {
   const sliderElement = document.querySelector('.effect-level__slider');
   if (sliderElement) {
     sliderElement.noUiSlider.set(value);
   }
-};
+}
 
 // Добавление слушателей событий
 document.querySelector('.effects__list').addEventListener('change', onEffectChange);
