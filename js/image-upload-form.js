@@ -1,7 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { onEffectChange } from './image-effects.js';
 import { updateScale, onSmallerClick, onBiggerClick } from './image-scale.js';
-import { isValid, hashtagInput, descriptionInput } from './validation.js';
+import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
 
 const uploadForm = document.querySelector('.img-upload__form'); // Форма загрузки изображения
 const imageEditingForm = document.querySelector('.img-upload__overlay'); // Модальное окно редактирования изображения
