@@ -1,6 +1,8 @@
+// Импортируем необходимые функции из других модулей
 import { isEnterKey, onDocumentKeydown } from './util.js';
 import { renderComments, loadMoreComments, setLocalComments } from './creating-comments.js';
 
+// Находим элементы на странице
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const socialCaption = bigPicture.querySelector('.social__caption');
@@ -11,6 +13,7 @@ const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 
+// Функция для отображения модального окна с фото
 const renderModal = ({ url, description, likes, avatar, avatarAlt }) => {
   bigPictureImg.src = url;
   socialCaption.textContent = description;
@@ -21,6 +24,7 @@ const renderModal = ({ url, description, likes, avatar, avatarAlt }) => {
   renderComments();
 };
 
+// Функция для показа модального окна
 const showModal = () => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -29,11 +33,11 @@ const showModal = () => {
   bigPicture.focus();
 
   document.addEventListener('keydown', onDocumentKeydown);
-
 };
 
+// Функция для открытия модального окна с фото
 export const openModal = (photo) => {
-  setLocalComments([...photo.comments]);
+  setLocalComments([...photo.comments]); // Устанавливаем локальный массив комментариев
   renderModal({
     url: photo.url,
     description: photo.description,
@@ -44,6 +48,7 @@ export const openModal = (photo) => {
   showModal();
 };
 
+// Функция для закрытия модального окна
 const closeModal = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -51,21 +56,27 @@ const closeModal = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
+// Обработчик события на клик по кнопке закрытия модального окна
 const onClosePhotoClick = (evt) => {
   if (evt.target === bigPicture) {
     closeModal();
   }
 };
 
+// Обработчик события на нажатие клавиши Enter при фокусе на кнопке закрытия модального окна
 const onClosePhotoKeydown = (evt) => {
   if (isEnterKey(evt)) {
     closeModal();
   }
 };
 
+// Добавляем обработчики событий на кнопку "Загрузить еще" и кнопку закрытия модального окна
 commentsLoader.addEventListener('click', loadMoreComments);
 bigPictureClose.addEventListener('click', closeModal);
 bigPictureClose.addEventListener('keydown', onClosePhotoKeydown);
+
+// Добавляем обработчик события на клик по модальному окну для закрытия его
 bigPicture.addEventListener('click', onClosePhotoClick);
 
+// Экспортируем функцию для закрытия модального окна из других модулей
 export { closeModal };
