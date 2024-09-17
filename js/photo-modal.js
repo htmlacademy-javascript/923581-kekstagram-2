@@ -1,94 +1,82 @@
-// Импорт функций: Мы импортируем необходимые функции из других модулей для обработки событий клавиатуры и работы с комментариями.
-// Получение элементов: С помощью document.querySelector мы получаем доступ к элементам модального окна, чтобы управлять их содержимым.
-// Отображение модального окна: Функция renderModal отвечает за установку данных в модальном окне, включая изображение, описание и комментарии.
-// Показ и закрытие модального окна: Функции showModal и closeModal управляют видимостью модального окна и состоянием прокрутки страницы.
-// Обработка событий: Мы добавляем обработчики событий для клавиш и кликов, чтобы обеспечить интерактивность и удобство использования модального окна.
+// Импортируем необходимые функции из других модулей
+import { isEnterKey, onDocumentKeydown } from './util.js';
+import { renderComments, loadMoreComments, setLocalComments } from './creating-comments.js';
 
-// Импорт функций
-// Импортируем функции, которые помогут определить, была ли нажата клавиша Escape или Enter,
-// а также функции для работы с комментариями.
-import { isEnterKey, onDocumentKeydown } from './util.js'; // Импорт функций для проверки нажатия клавиш
-import { renderComments, loadMoreComments, setLocalComments } from './creating-comments.js'; // Импорт функций для работы с комментариями
+// Находим элементы на странице
+const bigPicture = document.querySelector('.big-picture');
+const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+const socialCaption = bigPicture.querySelector('.social__caption');
+const socialHeader = bigPicture.querySelector('.social__header');
+const socialHeaderPicture = socialHeader.querySelector('.social__picture');
+const likesCount = bigPicture.querySelector('.likes-count');
+const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
+const socialComments = bigPicture.querySelector('.social__comments');
+const commentsLoader = bigPicture.querySelector('.comments-loader');
 
-// Получение элементов модального окна
-// Код получает доступ к различным элементам модального окна, чтобы впоследствии изменять их содержимое и управлять отображением.
-const bigPicture = document.querySelector('.big-picture'); // Модальное окно
-const bigPictureImg = bigPicture.querySelector('.big-picture__img img'); // Изображение в модальном окне
-const socialCaption = bigPicture.querySelector('.social__caption'); // Описание изображения
-const socialHeader = bigPicture.querySelector('.social__header'); // Заголовок с информацией о пользователе
-const socialHeaderPicture = socialHeader.querySelector('.social__picture'); // Аватар пользователя
-const likesCount = bigPicture.querySelector('.likes-count'); // Количество лайков
-const bigPictureClose = bigPicture.querySelector('.big-picture__cancel'); // Кнопка закрытия модального окна
-const socialComments = bigPicture.querySelector('.social__comments'); // Список комментариев
-const commentsLoader = bigPicture.querySelector('.comments-loader'); // Кнопка загрузки дополнительных комментариев
-
-// Отображение модального окна
-// Функция renderModal устанавливает содержимое модального окна, включая изображение, описание, количество лайков и комментарии.
+// Функция для отображения модального окна с фото
 const renderModal = ({ url, description, likes, avatar, avatarAlt }) => {
-  bigPictureImg.src = url; // Устанавливаем источник изображения
-  socialCaption.textContent = description; // Устанавливаем текст описания
-  likesCount.textContent = likes; // Устанавливаем количество лайков
-  socialHeaderPicture.src = avatar; // Устанавливаем аватар автора
-  socialHeaderPicture.alt = avatarAlt; // Устанавливаем альтернативный текст для аватара
-  socialComments.innerHTML = ''; // Очищаем список комментариев перед добавлением новых
-  renderComments(); // Вызываем функцию для отображения комментариев
+  bigPictureImg.src = url;
+  socialCaption.textContent = description;
+  likesCount.textContent = likes;
+  socialHeaderPicture.src = avatar;
+  socialHeaderPicture.alt = avatarAlt;
+  socialComments.innerHTML = '';
+  renderComments();
 };
 
-// Показ модального окна
-// Функция showModal делает модальное окно видимым и блокирует прокрутку страницы.
+// Функция для показа модального окна
 const showModal = () => {
-  bigPicture.classList.remove('hidden'); // Убираем класс 'hidden', чтобы показать модальное окно
-  document.body.classList.add('modal-open'); // Блокируем прокрутку страницы
-  bigPictureClose.tabIndex = 2; // Устанавливаем tabindex для кнопки закрытия
-  bigPicture.tabIndex = 1; // Устанавливаем tabindex для модального окна
-  bigPicture.focus(); // Устанавливаем фокус на модальное окно
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  bigPictureClose.tabIndex = 2;
+  bigPicture.tabIndex = 1;
+  bigPicture.focus();
 
-  document.addEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
-
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-// Открытие модального окна
-// Функция openModal открывает модальное окно, устанавливает локальные комментарии и добавляет обработчики событий.
+// Функция для открытия модального окна с фото
 export const openModal = (photo) => {
-  setLocalComments([...photo.comments]); // Устанавливаем локальные комментарии
-  renderModal({ // Устанавливаем содержимое модального окна
+  setLocalComments([...photo.comments]); // Устанавливаем локальный массив комментариев
+  renderModal({
     url: photo.url,
     description: photo.description,
     likes: photo.likes,
     avatar: photo.avatar,
     avatarAlt: photo.avatarAlt
   });
-  showModal(); // Показываем модальное окно
+  showModal();
 };
 
-// Закрытие модального окна
-// Функция closeModal скрывает модальное окно и удаляет все обработчики событий, чтобы избежать утечек памяти.
+// Функция для закрытия модального окна
 const closeModal = () => {
-  bigPicture.classList.add('hidden'); // Добавляем класс 'hidden', чтобы скрыть модальное окно
-  document.body.classList.remove('modal-open'); // Разрешаем прокрутку страницы
+  bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
 
-  document.removeEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-// Функция onClosePhotoClick обрабатывает закрытие модального окна при клике вне изображения.
+// Обработчик события на клик по кнопке закрытия модального окна
 const onClosePhotoClick = (evt) => {
-  if (evt.target === bigPicture) { // Проверяем, был ли клик вне изображения
-    closeModal(); // Закрываем модальное окно
+  if (evt.target === bigPicture) {
+    closeModal();
   }
 };
 
-// Обработка событий закрытия
-// Функция onClosePhotoKeydown обрабатывает нажатия клавиш для закрытия модального окна при нажатии клавиши Enter.
+// Обработчик события на нажатие клавиши Enter при фокусе на кнопке закрытия модального окна
 const onClosePhotoKeydown = (evt) => {
-  if (isEnterKey(evt)) { // Проверяем, нажата ли клавиша Enter
-    closeModal(); // Закрываем модальное окно
+  if (isEnterKey(evt)) {
+    closeModal();
   }
 };
 
-// Добавляем обработчики событий для загрузки дополнительных комментариев и закрытия окна
-commentsLoader.addEventListener('click', loadMoreComments); // Обработчик для загрузки дополнительных комментариев
-bigPictureClose.addEventListener('click', closeModal); // Обработчик для кнопки закрытия
-bigPictureClose.addEventListener('keydown', onClosePhotoKeydown); // Обработчик для нажатия клавиши Enter на кнопке закрытия
-bigPicture.addEventListener('click', onClosePhotoClick); // Обработчик для клика вне изображения
+// Добавляем обработчики событий на кнопку "Загрузить еще" и кнопку закрытия модального окна
+commentsLoader.addEventListener('click', loadMoreComments);
+bigPictureClose.addEventListener('click', closeModal);
+bigPictureClose.addEventListener('keydown', onClosePhotoKeydown);
 
+// Добавляем обработчик события на клик по модальному окну для закрытия его
+bigPicture.addEventListener('click', onClosePhotoClick);
+
+// Экспортируем функцию для закрытия модального окна из других модулей
 export { closeModal };
