@@ -1,61 +1,39 @@
-//* Импорт: В начале кода добавлены комментарии, объясняющие, какие константы и функции импортируются и для чего они нужны.
-//* Функция generateComments:
-// Добавлены комментарии, объясняющие, что делает функция, как генерируется количество комментариев и как создаются объекты комментариев.
-// Каждый объект комментария теперь имеет четкие пояснения к каждому свойству.
-//* Функция generatePhotos:
-// Комментарии объясняют, как генерируются фотографии, включая их идентификаторы, URL, описания, количество лайков и комментарии.
-// Пояснения добавлены к каждому свойству объекта фотографии, чтобы было понятно, как они формируются.
-//* Экспорт: В конце кода добавлен комментарий, объясняющий, что функции экспортируются для использования в других модулях.
+import { MESSAGES, NAMES, DISCRIPTIONS, Ranges } from './constants.js';
+import { getRandomInt, getRandomElement } from './util.js';
 
-// Импортируем необходимые константы и функции
-import { MESSAGES, NAMES, DISCRIPTIONS, Ranges } from './constants.js'; // Импортируем массивы сообщений, имен, описаний и диапазонов значений
-import { getRandomInt, getRandomElement } from './util.js'; // Импортируем функции для генерации случайных чисел и выбора случайного элемента
-
-//*  ======================== Генерация массивов с фото, описанием и комментариями ========================
-
-// Функция для генерации массива комментариев
-// Возвращает массив объектов, каждый из которых представляет собой комментарий с аватаром, сообщением и именем автора.
 const generateComments = () => {
-  // Генерируем случайное количество комментариев в заданном диапазоне
   const commentsCount = getRandomInt(Ranges.COMMENTS.MIN, Ranges.COMMENTS.MAX);
-  const comments = []; // Массив для хранения комментариев
+  const comments = [];
 
-  // Генерируем комментарии
   for (let i = 0; i < commentsCount; i++) {
     comments.push({
-      id: i + 1, // Идентификатор комментария (начинается с 1)
-      avatar: `img/avatar-${getRandomInt(Ranges.AVATARS.MIN, Ranges.AVATARS.MAX)}.svg`, // Генерируем случайный путь к аватарке
-      message: getRandomElement(MESSAGES), // Выбираем случайное сообщение из массива сообщений
-      name: getRandomElement(NAMES) // Выбираем случайное имя из массива имен
+      id: i + 1,
+      avatar: `img/avatar-${getRandomInt(Ranges.AVATARS.MIN, Ranges.AVATARS.MAX)}.svg`,
+      message: getRandomElement(MESSAGES),
+      name: getRandomElement(NAMES)
     });
   }
 
-  return comments; // Возвращаем массив с комментариями
+  return comments;
 };
 
-// Функция для генерации массива фотографий
-// Возвращает массив объектов, каждый из которых представляет собой фотографию с описанием, количеством лайков и комментариями.
 const generatePhotos = () => {
-  const photos = []; // Массив для хранения фотографий
+  const photos = [];
 
-  // Генерируем фотографии в заданном диапазоне
   for (let i = Ranges.PHOTOS.MIN; i <= Ranges.PHOTOS.MAX; i++) {
-    const avatarIndex = getRandomInt(Ranges.AVATARS.MIN, Ranges.AVATARS.MAX); // Генерируем случайный индекс для аватара
+    const avatarIndex = getRandomInt(Ranges.AVATARS.MIN, Ranges.AVATARS.MAX);
     photos.push({
-      id: i, // Идентификатор фотографии
-      url: `photos/${i}.jpg`, // Путь к изображению фотографии
-      description: DISCRIPTIONS[i - 1], // Получаем описание фотографии из массива описаний (индекс с 0)
-      likes: getRandomInt(Ranges.LIKES.MIN, Ranges.LIKES.MAX), // Генерируем случайное количество лайков в заданном диапазоне
-      comments: generateComments(), // Генерируем массив комментариев для данной фотографии
-      avatar: `img/avatar-${avatarIndex}.svg`, // Генерируем путь к аватару автора фотографии
-      avatarAlt: `Аватар автора фотографии ${getRandomElement(NAMES)}` // Устанавливаем альтернативный текст для аватара
+      id: i,
+      url: `photos/${i}.jpg`,
+      description: DISCRIPTIONS[i - 1],
+      likes: getRandomInt(Ranges.LIKES.MIN, Ranges.LIKES.MAX),
+      comments: generateComments(),
+      avatar: `img/avatar-${avatarIndex}.svg`,
+      avatarAlt: `Аватар автора фотографии ${getRandomElement(NAMES)}`
     });
   }
 
-  return photos; // Возвращаем массив с фотографиями
+  return photos;
 };
 
-
-// Экспортируем функции для использования в других модулях
 export { generatePhotos };
-
