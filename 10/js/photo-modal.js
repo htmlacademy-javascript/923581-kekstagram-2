@@ -70,8 +70,6 @@ const closeModal = () => {
   document.removeEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
 };
 
-
-
 // Функция onClosePhotoClick обрабатывает закрытие модального окна при клике вне изображения.
 const onClosePhotoClick = (evt) => {
   if (evt.target === bigPicture) { // Проверяем, был ли клик вне изображения

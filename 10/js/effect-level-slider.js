@@ -8,7 +8,7 @@ noUiSlider.create(slider, {
   range: { min: [0], max: [100] },
 });
 
-slider.noUiSlider.on('update', function (values) {
+slider.noUiSlider.on('update', (values) => {
   effectLevelInput.value = values[0];
   updateImageEffect();
 });
