@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
-import { onEffectChange, updateScale, onSmallerClick, onBiggerClick } from './effects-slider.js';
-import { isValid, hashtagInput, descriptionInput } from './validation.js'; // Импортируем функции валидации
+import { onEffectChange } from './image-effects.js';
+import { updateScale, onSmallerClick, onBiggerClick } from './image-scale.js';
+import { isValid, hashtagInput, descriptionInput } from './validation.js';
 
 const uploadForm = document.querySelector('.img-upload__form'); // Форма загрузки изображения
 const imageEditingForm = document.querySelector('.img-upload__overlay'); // Модальное окно редактирования изображения
