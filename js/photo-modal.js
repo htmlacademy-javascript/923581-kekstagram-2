@@ -7,7 +7,7 @@
 // Импорт функций
 // Импортируем функции, которые помогут определить, была ли нажата клавиша Escape или Enter,
 // а также функции для работы с комментариями.
-import { isEscapeKey, isEnterKey } from './util.js'; // Импорт функций для проверки нажатия клавиш
+import { isEnterKey, onDocumentKeydown } from './util.js'; // Импорт функций для проверки нажатия клавиш
 import { renderComments, loadMoreComments, setLocalComments } from './creating-comments.js'; // Импорт функций для работы с комментариями
 
 // Получение элементов модального окна
@@ -42,6 +42,9 @@ const showModal = () => {
   bigPictureClose.tabIndex = 2; // Устанавливаем tabindex для кнопки закрытия
   bigPicture.tabIndex = 1; // Устанавливаем tabindex для модального окна
   bigPicture.focus(); // Устанавливаем фокус на модальное окно
+
+  document.addEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
+
 };
 
 // Открытие модального окна
@@ -63,15 +66,8 @@ export const openModal = (photo) => {
 const closeModal = () => {
   bigPicture.classList.add('hidden'); // Добавляем класс 'hidden', чтобы скрыть модальное окно
   document.body.classList.remove('modal-open'); // Разрешаем прокрутку страницы
-};
 
-// Обработка нажатий клавиш
-// Функция onDocumentKeydown обрабатывает нажатия клавиш и закрывает модальное окно при нажатии клавиш Escape или Enter.
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) || isEnterKey(evt)) { // Проверяем, нажата ли клавиша Escape или Enter
-    evt.preventDefault(); // Предотвращаем действие по умолчанию
-    closeModal(); // Закрываем модальное окно
-  }
+  document.removeEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
 };
 
 // Функция onClosePhotoClick обрабатывает закрытие модального окна при клике вне изображения.
@@ -91,7 +87,8 @@ const onClosePhotoKeydown = (evt) => {
 
 // Добавляем обработчики событий для загрузки дополнительных комментариев и закрытия окна
 commentsLoader.addEventListener('click', loadMoreComments); // Обработчик для загрузки дополнительных комментариев
-document.addEventListener('keydown', onDocumentKeydown); // Обработчик для нажатий клавиш
 bigPictureClose.addEventListener('click', closeModal); // Обработчик для кнопки закрытия
 bigPictureClose.addEventListener('keydown', onClosePhotoKeydown); // Обработчик для нажатия клавиши Enter на кнопке закрытия
 bigPicture.addEventListener('click', onClosePhotoClick); // Обработчик для клика вне изображения
+
+export { closeModal };
