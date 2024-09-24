@@ -1,3 +1,5 @@
+import { closeModal } from './photo-modal.js';
+
 // Функция для проверки длины строки
 const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols;
 

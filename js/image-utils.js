@@ -11,17 +11,6 @@ hiddenScaleInput.type = 'hidden';
 hiddenScaleInput.name = 'scale';
 document.querySelector('.img-upload__form').appendChild(hiddenScaleInput);
 
-
-//  Добавляет обработчики событий для кнопок увеличения и уменьшения масштаба.
-export const initScaleControls = () => {
-  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-  const scaleControlBigger = document.querySelector('.scale__control--bigger');
-
-  scaleControlSmaller.addEventListener('click', onSmallerClick);
-  scaleControlBigger.addEventListener('click', onBiggerClick);
-};
-
-
 //  Обновляет масштаб изображения и значение скрытого поля.
 export const updateScale = () => {
   const imgElement = document.querySelector('.img-upload__preview img');
@@ -51,4 +40,13 @@ export const onBiggerClick = () => {
     currentScale += SCALE_STEP;
     updateScale();
   }
+};
+
+//  Добавляет обработчики событий для кнопок увеличения и уменьшения масштаба.
+export const initScaleControls = () => {
+  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+  const scaleControlBigger = document.querySelector('.scale__control--bigger');
+
+  scaleControlSmaller.addEventListener('click', onSmallerClick);
+  scaleControlBigger.addEventListener('click', onBiggerClick);
 };

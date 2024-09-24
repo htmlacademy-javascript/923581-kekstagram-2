@@ -25,10 +25,10 @@ export const renderEffectImage = () => {
   imgElement.className = '';
   imgElement.classList.add(`effects__preview--${effectType}`);
   applyEffect(Effects[effectType]);
-}
+};
 
 // Функция для сброса изображения к исходному состоянию
 export const resetImage = () => {
   imgElement.style.filter = '';
   imgElement.className = '';
-}
+};
