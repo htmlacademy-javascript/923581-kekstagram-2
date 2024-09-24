@@ -25,19 +25,16 @@ const createThumbnail = (photo) => {
 
 // Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
-  localData.push(...data.slice()); // Добавляем данные в локальный массив
+  localData.push(...data.slice());
 
-  const fragment = document.createDocumentFragment(); // Создаем фрагмент для добавления элементов на страницу
-
+  const fragment = document.createDocumentFragment();
   data.forEach((photo) => {
-    const thumbnail = createThumbnail(photo); // Создаем миниатюру фото
-
-    thumbnail.dataset.pictureId = photo.id; // Устанавливаем id фото в атрибуте data-picture-id
-
-    fragment.appendChild(thumbnail); // Добавляем миниатюру во фрагмент
+    const thumbnail = createThumbnail(photo);
+    thumbnail.dataset.pictureId = photo.id;
+    fragment.appendChild(thumbnail);
   });
 
-  bigPictureNode.appendChild(fragment); // Добавляем фрагмент на страницу
+  bigPictureNode.appendChild(fragment);
 };
 
 // Добавляем обработчик события на клик по миниатюре фото
@@ -45,13 +42,10 @@ container.addEventListener('click', (evt) => {
   const card = evt.target.closest('.picture');
 
   if (card) {
-    const id = Number(card.dataset.pictureId); // Получаем id фото из атрибута data-picture-id
-
-    const photoData = localData.find((item) => item.id === id); // Находим данные фото в локальном массиве
-
-    openModal(photoData); // Открываем модальное окно с фото
+    const id = Number(card.dataset.pictureId);
+    const photoData = localData.find((item) => item.id === id);
+    openModal(photoData);
   }
 });
 
-// Экспортируем функцию для отрисовки миниатюр фото на странице
 export { renderCards };

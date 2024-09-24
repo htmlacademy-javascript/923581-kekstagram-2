@@ -1,7 +1,10 @@
 import { isEscapeKey } from './util.js';
 import { resetSlider } from './effect-level-slider.js';
-import { updateScale, onSmallerClick, onBiggerClick } from './image-utils.js';
+import { updateScale, initScaleControls } from './image-utils.js';
 import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
+
+// Инициализация управления масштабом фотографии
+initScaleControls();
 
 // Определение элементов формы
 const uploadForm = document.querySelector('.img-upload__form');
@@ -9,11 +12,6 @@ const imageEditingForm = document.querySelector('.img-upload__overlay');
 const uploadFileStart = uploadForm.querySelector('#upload-file');
 const imageEditingFormClose = uploadForm.querySelector('#upload-cancel');
 const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level');
-
-
-// Определяем элементы управления масштабом
-const scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
-const scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
 
 // Обработчик закрытия формы редактирования
 const btnClick = () => {
@@ -39,6 +37,7 @@ function onImageEditingFormClose() {
   effectLevelControl.classList.add('hidden');
   uploadForm.reset();
 
+  // Удаляем обработчики событий при закрытии формы
   document.removeEventListener('keydown', onDocumentKeydown);
   imageEditingFormClose.removeEventListener('click', btnClick);
 }
@@ -50,6 +49,7 @@ const onPhotoSelect = () => {
   resetSlider();
   updateScale();
 
+  // Добавляем обработчики событий при открытии формы редактирования
   imageEditingFormClose.addEventListener('click', btnClick);
   document.addEventListener('keydown', onDocumentKeydown);
 };
@@ -61,7 +61,6 @@ const onFormSubmit = (evt) => {
   }
 };
 
+// Добавление обработчиков событий к элементам формы
 uploadFileStart.addEventListener('change', onPhotoSelect);
 uploadForm.addEventListener('submit', onFormSubmit);
-scaleControlSmaller.addEventListener('click', onSmallerClick);
-scaleControlBigger.addEventListener('click', onBiggerClick);

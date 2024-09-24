@@ -37,7 +37,7 @@ const showModal = () => {
 
 // Функция для открытия модального окна с фото
 export const openModal = (photo) => {
-  setLocalComments([...photo.comments]); // Устанавливаем локальный массив комментариев
+  setLocalComments([...photo.comments]);
   renderModal({
     url: photo.url,
     description: photo.description,
@@ -78,5 +78,4 @@ bigPictureClose.addEventListener('keydown', onClosePhotoKeydown);
 // Добавляем обработчик события на клик по модальному окну для закрытия его
 bigPicture.addEventListener('click', onClosePhotoClick);
 
-// Экспортируем функцию для закрытия модального окна из других модулей
 export { closeModal };

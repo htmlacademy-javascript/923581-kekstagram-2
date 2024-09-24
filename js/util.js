@@ -15,9 +15,9 @@ const isEnterKey = (evt) => evt.key === 'Enter';
 
 // Обработчик события на нажатие клавиши на всем документе
 function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt) || isEnterKey(evt)) { // Проверяем, была ли нажата клавиша Escape или Enter
-    evt.preventDefault(); // Отменяем стандартное действие браузера
-    closeModal(); // Закрываем модальное окно
+  if (isEscapeKey(evt) || isEnterKey(evt)) {
+    evt.preventDefault();
+    closeModal();
   }
 }
 
@@ -32,7 +32,6 @@ const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
   }
 };
 
-// Экспортируем функции для использования в других модулях
 export {
   getRandomInt,
   getRandomElement,

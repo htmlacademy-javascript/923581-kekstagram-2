@@ -1,5 +1,9 @@
 import { Effects } from './constants.js';
 import { onSmallerClick, onBiggerClick } from './image-utils.js';
+import { initScaleControls } from './image-utils.js';
+
+// Инициализация элементов управления масштабом фотографии
+initScaleControls();
 
 // Получаем элементы изображения и уровня эффекта
 const imgElement = document.querySelector('.img-upload__preview img');
@@ -17,7 +21,8 @@ document.querySelector('.scale__control--bigger').addEventListener('click', onBi
 // Функция для рендеринга изображения с эффектом
 export const renderEffectImage = () => {
   const effectType = document.querySelector('.effects__radio:checked').value;
-  imgElement.classList = '';
+
+  imgElement.className = '';
   imgElement.classList.add(`effects__preview--${effectType}`);
   applyEffect(Effects[effectType]);
 }
@@ -25,5 +30,5 @@ export const renderEffectImage = () => {
 // Функция для сброса изображения к исходному состоянию
 export const resetImage = () => {
   imgElement.style.filter = '';
-  imgElement.classList = '';
+  imgElement.className = '';
 }
