@@ -1,34 +1,38 @@
 import { isEscapeKey } from './util.js';
-import { onEffectChange } from './image-effects.js';
-import { updateScale, onSmallerClick, onBiggerClick } from './image-scale.js';
+import { resetSlider } from './effect-level-slider.js';
+import { updateScale, onSmallerClick, onBiggerClick } from './image-utils.js';
 import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
 
-const uploadForm = document.querySelector('.img-upload__form'); // Форма загрузки изображения
-const imageEditingForm = document.querySelector('.img-upload__overlay'); // Модальное окно редактирования изображения
-const uploadFileStart = uploadForm.querySelector('#upload-file'); // Поле для загрузки файла
-const imageEditingFormClose = uploadForm.querySelector('#upload-cancel'); // Кнопка закрытия модального окна
-const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level'); // Элемент уровня эффекта
-const effectsList = uploadForm.querySelector('.effects__list'); // Список эффектов
+// Определение элементов формы
+const uploadForm = document.querySelector('.img-upload__form');
+const imageEditingForm = document.querySelector('.img-upload__overlay');
+const uploadFileStart = uploadForm.querySelector('#upload-file');
+const imageEditingFormClose = uploadForm.querySelector('#upload-cancel');
+const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level');
+
 
 // Определяем элементы управления масштабом
-const scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller'); // Кнопка уменьшения масштаба
-const scaleControlBigger = uploadForm.querySelector('.scale__control--bigger'); // Кнопка увеличения масштаба
+const scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
+const scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
 
+// Обработчик закрытия формы редактирования
 const btnClick = () => {
-  onImageEditingFormClose(); // Закрытие формы редактирования изображения при нажатии на кнопку
+  onImageEditingFormClose();
 };
 
+// Обработчик нажатий клавиш
 const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) { // Проверяем, нажата ли клавиша Escape
-    evt.preventDefault(); // Предотвращаем действие по умолчанию
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
     if (document.activeElement === hashtagInput || document.activeElement === descriptionInput) {
-      evt.stopPropagation(); // Останавливаем дальнейшую обработку события
+      evt.stopPropagation();
     } else {
-      onImageEditingFormClose(); // Закрываем форму редактирования изображения
+      onImageEditingFormClose();
     }
   }
 };
 
+// Функция закрытия формы редактирования
 function onImageEditingFormClose() {
   document.body.classList.remove('modal-open');
   imageEditingForm.classList.add('hidden');
@@ -37,33 +41,27 @@ function onImageEditingFormClose() {
 
   document.removeEventListener('keydown', onDocumentKeydown);
   imageEditingFormClose.removeEventListener('click', btnClick);
-  document.removeEventListener('click', onOutsideClick);
 }
 
-function onOutsideClick(evt) {
-  if (evt.target === imageEditingForm) {
-    onImageEditingFormClose(); // Закрываем модальное окно при клике вне него
-  }
-}
-
+// Функция выбора фотографии
 const onPhotoSelect = () => {
   document.body.classList.add('modal-open');
   imageEditingForm.classList.remove('hidden');
-  updateScale(); // Обновляем отображение масштаба
+  resetSlider();
+  updateScale();
+
   imageEditingFormClose.addEventListener('click', btnClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onOutsideClick);
 };
 
+// Обработчик отправки формы
 const onFormSubmit = (evt) => {
-  if (!isValid()) { // Используем импортированную функцию валидации
+  if (!isValid()) {
     evt.preventDefault();
   }
 };
 
-// Добавляем обработчики событий на элементы формы и кнопки управления масштабом
 uploadFileStart.addEventListener('change', onPhotoSelect);
 uploadForm.addEventListener('submit', onFormSubmit);
-effectsList.addEventListener('change', onEffectChange);
 scaleControlSmaller.addEventListener('click', onSmallerClick);
 scaleControlBigger.addEventListener('click', onBiggerClick);
