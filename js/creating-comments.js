@@ -11,11 +11,20 @@ let localComments;
 let currentCommentIndex = 0;
 const commentsPerPage = 5;
 
-// Функция для создания комментария
+//  Функция для создания комментария
 const createComment = ({ avatar, name, message }) => {
+  // Клонируем шаблон комментария
   const socialCommentElement = socialCommentsTemplate.cloneNode(true);
-  socialCommentElement.querySelector('.social__picture').src = avatar;
+
+  // Находим элемент аватара и устанавливаем его значения
+  const socialCommentAvatar = socialCommentElement.querySelector('.social__picture');
+  socialCommentAvatar.src = avatar;
+  socialCommentAvatar.alt = name;
+
+  // Находим элемент текста комментария и устанавливаем его значение
   socialCommentElement.querySelector('.social__text').textContent = message;
+
+  // Возвращаем созданный комментарий
   return socialCommentElement;
 };
 
