@@ -1,4 +1,4 @@
-import { MESSAGES, NAMES, DISCRIPTIONS, Ranges } from './constants.js';
+// import { MESSAGES, NAMES, DISCRIPTIONS, Ranges } from './constants.js';
 import { getRandomInt, getRandomElement } from './util.js';
 
 const generateComments = () => {
@@ -17,23 +17,23 @@ const generateComments = () => {
   return comments;
 };
 
-const generatePhotos = () => {
-  const photos = [];
+// const generatePhotos = () => {
+//   const photos = [];
 
-  for (let i = Ranges.PHOTOS.MIN; i <= Ranges.PHOTOS.MAX; i++) {
-    const avatarIndex = getRandomInt(Ranges.AVATARS.MIN, Ranges.AVATARS.MAX);
-    photos.push({
-      id: i,
-      url: `photos/${i}.jpg`,
-      description: DISCRIPTIONS[i - 1],
-      likes: getRandomInt(Ranges.LIKES.MIN, Ranges.LIKES.MAX),
-      comments: generateComments(),
-      avatar: `img/avatar-${avatarIndex}.svg`,
-      avatarAlt: `Аватар автора фотографии ${getRandomElement(NAMES)}`
-    });
-  }
+//   for (let i = Ranges.PHOTOS.MIN; i <= Ranges.PHOTOS.MAX; i++) {
+//     const avatarIndex = getRandomInt(Ranges.AVATARS.MIN, Ranges.AVATARS.MAX);
+//     photos.push({
+//       id: i,
+//       url: `photos/${i}.jpg`,
+//       description: DISCRIPTIONS[i - 1],
+//       likes: getRandomInt(Ranges.LIKES.MIN, Ranges.LIKES.MAX),
+//       comments: generateComments(),
+//       avatar: `img/avatar-${avatarIndex}.svg`,
+//       avatarAlt: `Аватар автора фотографии ${getRandomElement(NAMES)}`
+//     });
+//   }
 
-  return photos;
-};
+//   return photos;
+// };
 
 export { generatePhotos };

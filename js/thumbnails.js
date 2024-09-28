@@ -9,32 +9,32 @@ const bigPictureNode = document.querySelector('.pictures');
 const container = document.querySelector('.pictures');
 const localData = [];
 
-// Функция для создания миниатюры фото
-const createThumbnail = (photo) => {
-  const thumbnail = template.cloneNode(true); // Клонируем шаблон
-
-  const image = thumbnail.querySelector('.picture__img');
-  image.src = photo.url;
-  image.alt = photo.description;
-
-  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
-  thumbnail.querySelector('.picture__comments').textContent = photo.comments ? photo.comments.length : 0;
-
-  return thumbnail;
-};
-
 // Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
-  localData.push(...data.slice());
+  localData.push(...data.slice()); // Добавляем данные в локальный массив
 
   const fragment = document.createDocumentFragment();
-  data.forEach((photo) => {
-    const thumbnail = createThumbnail(photo);
-    thumbnail.dataset.pictureId = photo.id;
-    fragment.appendChild(thumbnail);
-  });
 
-  bigPictureNode.appendChild(fragment);
+  // Используем цикл for вместо forEach
+  for (let i = 0; i < data.length; i++) {
+    const photo = data[i];
+    const thumbnail = template.cloneNode(true); // Клонируем шаблон
+
+    const image = thumbnail.querySelector('.picture__img');
+    image.src = photo.url;
+    image.alt = photo.description;
+
+    thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+
+    // Проверяем наличие комментариев и отображаем их количество
+    const commentsCount = Array.isArray(photo.comments) ? photo.comments.length : 0;
+    thumbnail.querySelector('.picture__comments').textContent = commentsCount;
+
+    thumbnail.dataset.pictureId = photo.id; // Устанавливаем ID миниатюры
+    fragment.appendChild(thumbnail); // Добавляем миниатюру во фрагмент
+  }
+
+  bigPictureNode.appendChild(fragment); // Добавляем фрагмент в DOM
 };
 
 // Добавляем обработчик события на клик по миниатюре фото

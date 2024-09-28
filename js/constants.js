@@ -70,4 +70,4 @@ export const Effects = {
   heat: { filter: 'brightness', units: '', step: 0.1, min: 1, max: 3 },
 };
 
-export { MESSAGES, NAMES, DISCRIPTIONS, Ranges };
+export { Ranges };
