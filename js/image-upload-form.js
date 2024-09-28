@@ -1,7 +1,8 @@
-import { isEscapeKey } from './util.js';
+import { isEscapeKey, showAlert } from './util.js';
 import { resetSlider } from './effect-level-slider.js';
 import { updateScale, initScaleControls } from './image-utils.js';
 import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
+import { sendData } from './api.js';
 
 // Инициализация управления масштабом фотографии
 initScaleControls();
@@ -12,10 +13,16 @@ const imageEditingForm = document.querySelector('.img-upload__overlay');
 const uploadFileStart = uploadForm.querySelector('#upload-file');
 const imageEditingFormClose = uploadForm.querySelector('#upload-cancel');
 const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level');
+const submitButton = uploadForm.querySelector('#upload-submit');
 
 // Обработчик закрытия формы редактирования
 const btnClick = () => {
   onImageEditingFormClose();
+};
+
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
 };
 
 // Обработчик нажатий клавиш
@@ -54,13 +61,37 @@ const onPhotoSelect = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-// Обработчик отправки формы
-const onFormSubmit = (evt) => {
-  if (!isValid()) {
-    evt.preventDefault();
-  }
-};
-
 // Добавление обработчиков событий к элементам формы
 uploadFileStart.addEventListener('change', onPhotoSelect);
-uploadForm.addEventListener('submit', onFormSubmit);
+// uploadForm.addEventListener('submit', onFormSubmit);
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+
+const setUserFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    if (isValid()) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(
+          (err) => {
+            showAlert(err.message);
+          }
+        )
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+export { setUserFormSubmit, onImageEditingFormClose };
