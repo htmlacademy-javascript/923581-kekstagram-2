@@ -15,15 +15,13 @@ const imageEditingFormClose = uploadForm.querySelector('#upload-cancel');
 const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level');
 const submitButton = uploadForm.querySelector('#upload-submit');
 
-// Обработчик закрытия формы редактирования
-const btnClick = () => {
-  onImageEditingFormClose();
-};
-
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
   SENDING: 'Публикую...'
 };
+
+// Обработчик закрытия формы редактирования
+const onCloseButtonClick = () => onImageEditingFormClose();
 
 // Обработчик нажатий клавиш
 const onDocumentKeydown = (evt) => {
@@ -44,10 +42,21 @@ function onImageEditingFormClose() {
   effectLevelControl.classList.add('hidden');
   uploadForm.reset();
 
-  // Удаляем обработчики событий при закрытии формы
-  document.removeEventListener('keydown', onDocumentKeydown);
-  imageEditingFormClose.removeEventListener('click', btnClick);
+  // Удаление обработчиков событий
+  removeEventListeners();
 }
+
+// Добавление обработчиков событий
+const addEventListeners = () => {
+  imageEditingFormClose.addEventListener('click', onCloseButtonClick);
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+// Удаление обработчиков событий
+const removeEventListeners = () => {
+  document.removeEventListener('keydown', onDocumentKeydown);
+  imageEditingFormClose.removeEventListener('click', onCloseButtonClick);
+};
 
 // Функция выбора фотографии
 const onPhotoSelect = () => {
@@ -57,8 +66,7 @@ const onPhotoSelect = () => {
   updateScale();
 
   // Добавляем обработчики событий при открытии формы редактирования
-  imageEditingFormClose.addEventListener('click', btnClick);
-  document.addEventListener('keydown', onDocumentKeydown);
+  addEventListeners();
 };
 
 // Добавление обработчиков событий к элементам формы
@@ -75,7 +83,6 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-
 const setUserFormSubmit = (onSuccess) => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -84,11 +91,7 @@ const setUserFormSubmit = (onSuccess) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(onSuccess)
-        .catch(
-          (err) => {
-            showAlert(err.message);
-          }
-        )
+        .catch((err) => showAlert(err.message))
         .finally(unblockSubmitButton);
     }
   });

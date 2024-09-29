@@ -6,12 +6,11 @@ import { renderComments, loadMoreComments, setLocalComments } from './creating-c
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const socialCaption = bigPicture.querySelector('.social__caption');
-const socialHeader = bigPicture.querySelector('.social__header');
-const socialHeaderPicture = socialHeader.querySelector('.social__picture');
 const likesCount = bigPicture.querySelector('.likes-count');
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
+const socialHeaderPicture = socialComments.querySelector('.social__picture');
 
 // Функция для отображения модального окна с фото
 const renderModal = ({ url, description, likes, avatar, avatarAlt }) => {
