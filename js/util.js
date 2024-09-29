@@ -34,62 +34,28 @@ const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
   }
 };
 
+const ALERT_SHOW_TIME = 5000;
+
 const showAlert = (message) => {
-  const errorTemplate = document.getElementById('error');
-  if (!errorTemplate) {
-    console.error("Шаблон ошибки не найден");
-    return; // Выход, если шаблон не найден
-  }
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+  alertContainer.textContent = message;
 
-  // Клонируем содержимое шаблона
-  const errorMessage = errorTemplate.content.cloneNode(true);
+  document.body.append(alertContainer);
 
-  // Находим элемент для вставки сообщения
-  const messageContainer = errorMessage.querySelector('.error__message');
-  if (messageContainer) {
-    messageContainer.textContent = message; // Устанавливаем текст сообщения
-  }
-
-  // Добавляем сообщение перед закрывающим тегом </body>
-  document.body.append(errorMessage);
-
-  // Находим кнопку закрытия
-  const closeButton = document.querySelector('.error__button');
-
-  // Функция закрытия сообщения
-  const closeErrorMessage = () => {
-    const messageSection = document.querySelector('.error');
-    if (messageSection) {
-      messageSection.remove();
-      document.removeEventListener('keydown', onEscKeyPress);
-      document.removeEventListener('click', onOutsideClick);
-    }
-  };
-
-  // Закрытие по клавише Esc
-  const onEscKeyPress = (evt) => {
-    if (isEscapeKey(evt)) {
-      closeErrorMessage();
-    }
-  };
-
-  // Закрытие по клику вне сообщения
-  const onOutsideClick = (evt) => {
-    if (errorMessage && !errorMessage.contains(evt.target)) {
-      closeErrorMessage();
-    }
-  };
-
-  // Проверка наличия кнопки
-  if (closeButton) {
-    closeButton.addEventListener('click', closeErrorMessage);
-  } else {
-    console.error("Кнопка закрытия сообщения об ошибке не найдена");
-  }
-
-  document.addEventListener('keydown', onEscKeyPress);
-  document.addEventListener('click', onOutsideClick);
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
 };
+
 
 export {
   getRandomInt,

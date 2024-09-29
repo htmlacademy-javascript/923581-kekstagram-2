@@ -1,6 +1,5 @@
 import { displaySuccessMessage } from './success-message.js';
 import { displayErrorMessage } from './error-message.js'; // Импорт функции для отображения сообщения об ошибке
-import { showAlert } from './util.js';
 
 const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 const Route = {
@@ -14,9 +13,9 @@ const Method = {
 };
 
 const ErrorText = {
-  GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  ERROR_INVALID_DATA: 'Переданы некорректные данные для отрисовки миниатюр',
-  MESSAGE_NO_DATA_FOR_MODAL: 'Не найдены данные для открытия модального окна',
+  GET_DATA: 'Ошибка загрузки данных',
+  ERROR_INVALID_DATA: 'Некорректные данные',
+  MESSAGE_NO_DATA_FOR_MODAL: 'Нет данных для модала',
 };
 
 const load = (route, errorText = null, method = Method.GET, body = null) =>
