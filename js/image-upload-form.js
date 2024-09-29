@@ -47,16 +47,16 @@ function onImageEditingFormClose() {
 }
 
 // Добавление обработчиков событий
-const addEventListeners = () => {
+function addEventListeners() {
   imageEditingFormClose.addEventListener('click', onCloseButtonClick);
   document.addEventListener('keydown', onDocumentKeydown);
-};
+}
 
 // Удаление обработчиков событий
-const removeEventListeners = () => {
+function removeEventListeners() {
   document.removeEventListener('keydown', onDocumentKeydown);
   imageEditingFormClose.removeEventListener('click', onCloseButtonClick);
-};
+}
 
 // Функция выбора фотографии
 const onPhotoSelect = () => {

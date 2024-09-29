@@ -24,7 +24,6 @@ export const updateScale = () => {
   hiddenScaleInput.value = currentScale;
 };
 
-
 // Уменьшает масштаб изображения на заданный шаг.
 export const onSmallerClick = () => {
   if (currentScale > MIN_SCALE) {
@@ -32,7 +31,6 @@ export const onSmallerClick = () => {
     updateScale();
   }
 };
-
 
 // Увеличивает масштаб изображения на заданный шаг.
 export const onBiggerClick = () => {

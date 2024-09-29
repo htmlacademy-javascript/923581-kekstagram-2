@@ -1,5 +1,6 @@
-// Импортируем функцию для открытия модального окна из другого модуля
 import { openModal } from './photo-modal.js';
+import { showAlert } from './util.js';
+import { ErrorText } from './api.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const bigPictureNode = document.querySelector('.pictures');
@@ -7,22 +8,21 @@ const localData = [];
 
 // Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
-  // localData.push(...data); // Добавляем данные в локальный массив
   if (!Array.isArray(data) || data.length === 0) {
-    console.warn('Переданы некорректные данные для отрисовки миниатюр.');
-    return; // Проверяем входные данные
+    showAlert(ErrorText.ERROR_INVALID_DATA);
+    return;
   }
 
   const existingThumbnails = bigPictureNode.querySelectorAll('.picture');
-  existingThumbnails.forEach(thumbnail => thumbnail.remove());
+  existingThumbnails.forEach((thumbnail) => thumbnail.remove());
 
   const fragment = document.createDocumentFragment();
 
-  data.forEach(photo => {
-    if (!localData.some(item => item.id === photo.id)) {
-      localData.push(photo); // Добавляем только уникальные элементы
+  data.forEach((photo) => {
+    if (!localData.some((item) => item.id === photo.id)) {
+      localData.push(photo);
     }
-    const thumbnail = template.cloneNode(true); // Клонируем шаблон
+    const thumbnail = template.cloneNode(true);
     const image = thumbnail.querySelector('.picture__img');
     image.src = photo.url;
     image.alt = photo.description || '';
@@ -30,13 +30,13 @@ const renderCards = (data) => {
     thumbnail.querySelector('.picture__likes').textContent = photo.likes || 0;
 
     // Проверяем наличие комментариев и отображаем их количество
-    const commentsCount = photo.comments?.length || 0; // Упрощаем проверку
+    const commentsCount = photo.comments?.length || 0;
     thumbnail.querySelector('.picture__comments').textContent = commentsCount;
-    thumbnail.dataset.pictureId = photo.id; // Устанавливаем ID миниатюры
-    fragment.appendChild(thumbnail); // Добавляем миниатюру во фрагмент
+    thumbnail.dataset.pictureId = photo.id;
+    fragment.appendChild(thumbnail);
   });
 
-  bigPictureNode.appendChild(fragment); // Добавляем фрагмент в DOM
+  bigPictureNode.appendChild(fragment);
 };
 
 // Добавляем обработчик события на клик по миниатюре фото
@@ -49,7 +49,7 @@ bigPictureNode.addEventListener('click', (evt) => {
     if (photoData) {
       openModal(photoData);
     } else {
-      console.warn('Не найдены данные для открытия модального окна.');
+      showAlert(ErrorText.MESSAGE_NO_DATA_FOR_MODAL);
     }
   }
 });
