@@ -3,6 +3,7 @@ import { resetSlider } from './effect-level-slider.js';
 import { updateScale, initScaleControls } from './image-utils.js';
 import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
 import { sendData } from './api.js';
+import { displayErrorMessage } from './error-message.js';
 
 // Инициализация управления масштабом фотографии
 initScaleControls();
@@ -91,7 +92,15 @@ const setUserFormSubmit = (onSuccess) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(onSuccess)
-        .catch((err) => showAlert(err.message))
+        .catch((err) => {
+          // Используем заголовок и кнопку из шаблона для отображения ошибки
+          const errorMessageData = {
+            title: 'Ошибка загрузки файла',
+            buttonText: 'Попробовать ещё раз',
+            formData: new FormData(evt.target)
+          };
+          displayErrorMessage(errorMessageData); // Передаем данные для отображения сообщения об ошибке
+        })
         .finally(unblockSubmitButton);
     }
   });

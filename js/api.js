@@ -1,9 +1,10 @@
 import { showAlert } from './util.js';
+import { displaySuccessMessage } from './success-message.js';
 
 const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 const Route = {
   GET_DATA: '/data',
-  SEND_DATA: '/',
+  SEND_DATA: '//',
 };
 
 const Method = {
@@ -31,6 +32,10 @@ const load = (route, errorText = null, method = Method.GET, body = null) =>
     });
 
 const getData = () => load(Route.GET_DATA, ErrorText.GET_DATA);
-const sendData = (body) => load(Route.SEND_DATA, ErrorText.SEND_DATA, Method.POST, body);
+const sendData = (body) =>
+  load(Route.SEND_DATA, ErrorText.SEND_DATA, Method.POST, body)
+    .then(() => {
+      displaySuccessMessage(); // Показать сообщение об успехе после успешной отправки
+    });
 
 export { getData, sendData, ErrorText };
