@@ -3,10 +3,12 @@ import { isEscapeKey } from './util.js';
 const displaySuccessMessage = () => {
   const successTemplate = document.getElementById('success');
   if (!successTemplate) {
-    return; // Если шаблон не найден, просто выходим из функции
+    return; // Выход, если шаблон не найден
   }
 
   const successMessage = successTemplate.content.cloneNode(true);
+
+  // Добавляем сообщение перед закрывающим тегом </body>
   document.body.append(successMessage);
 
   const closeButton = successMessage.querySelector('.success__button');
@@ -26,18 +28,18 @@ const displaySuccessMessage = () => {
   }
 
   // Закрытие по клавише Esc
-  function onEscKeyPress(evt) {
+  const onEscKeyPress = (evt) => {
     if (isEscapeKey(evt)) {
       closeSuccessMessage();
     }
-  }
+  };
 
   // Закрытие по клику вне сообщения
-  function onOutsideClick(evt) {
+  const onOutsideClick = (evt) => {
     if (successMessage && !successMessage.contains(evt.target)) {
       closeSuccessMessage();
     }
-  }
+  };
 
   document.addEventListener('keydown', onEscKeyPress);
   document.addEventListener('click', onOutsideClick);

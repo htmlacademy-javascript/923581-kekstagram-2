@@ -94,16 +94,16 @@ const setUserFormSubmit = (onSuccess) => {
         .then(onSuccess)
         .catch((err) => {
           // Используем заголовок и кнопку из шаблона для отображения ошибки
-          const errorMessageData = {
+          displayErrorMessage({
             title: 'Ошибка загрузки файла',
             buttonText: 'Попробовать ещё раз',
-            formData: new FormData(evt.target)
-          };
-          displayErrorMessage(errorMessageData); // Передаем данные для отображения сообщения об ошибке
+            formData: new FormData(evt.target) // Здесь можно сохранить данные формы
+          });
         })
         .finally(unblockSubmitButton);
     }
   });
 };
+
 
 export { setUserFormSubmit, onImageEditingFormClose };
