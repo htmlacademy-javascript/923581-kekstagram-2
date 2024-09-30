@@ -1,57 +1,57 @@
-// Импортируем функцию для открытия модального окна из другого модуля
 import { openModal } from './photo-modal.js';
+import { showAlert } from './util.js';
+import { ErrorText } from './api.js';
 
-// Находим шаблон для создания миниатюр фото и элемент, в который будем вставлять миниатюры
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const bigPictureNode = document.querySelector('.pictures');
-
-// Находим контейнер для миниатюр фото и создаем локальный массив данных
-const container = document.querySelector('.pictures');
 const localData = [];
-
-// Функция для создания миниатюры фото
-const createThumbnail = (photo) => {
-  const thumbnail = template.cloneNode(true); // Клонируем шаблон
-
-  const image = thumbnail.querySelector('.picture__img');
-  image.src = photo.url;
-  image.alt = photo.description;
-
-  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
-  thumbnail.querySelector('.picture__comments').textContent = photo.comments ? photo.comments.length : 0;
-
-  return thumbnail;
-};
 
 // Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
-  localData.push(...data.slice()); // Добавляем данные в локальный массив
+  if (!Array.isArray(data) || data.length === 0) {
+    showAlert(ErrorText.ERROR_INVALID_DATA);
+    return;
+  }
 
-  const fragment = document.createDocumentFragment(); // Создаем фрагмент для добавления элементов на страницу
+  const existingThumbnails = bigPictureNode.querySelectorAll('.picture');
+  existingThumbnails.forEach((thumbnail) => thumbnail.remove());
+
+  const fragment = document.createDocumentFragment();
 
   data.forEach((photo) => {
-    const thumbnail = createThumbnail(photo); // Создаем миниатюру фото
+    if (!localData.some((item) => item.id === photo.id)) {
+      localData.push(photo);
+    }
+    const thumbnail = template.cloneNode(true);
+    const image = thumbnail.querySelector('.picture__img');
+    image.src = photo.url;
+    image.alt = photo.description || '';
 
-    thumbnail.dataset.pictureId = photo.id; // Устанавливаем id фото в атрибуте data-picture-id
+    thumbnail.querySelector('.picture__likes').textContent = photo.likes || 0;
 
-    fragment.appendChild(thumbnail); // Добавляем миниатюру во фрагмент
+    // Проверяем наличие комментариев и отображаем их количество
+    const commentsCount = photo.comments?.length || 0;
+    thumbnail.querySelector('.picture__comments').textContent = commentsCount;
+    thumbnail.dataset.pictureId = photo.id;
+    fragment.appendChild(thumbnail);
   });
 
-  bigPictureNode.appendChild(fragment); // Добавляем фрагмент на страницу
+  bigPictureNode.appendChild(fragment);
 };
 
 // Добавляем обработчик события на клик по миниатюре фото
-container.addEventListener('click', (evt) => {
+bigPictureNode.addEventListener('click', (evt) => {
   const card = evt.target.closest('.picture');
 
   if (card) {
-    const id = Number(card.dataset.pictureId); // Получаем id фото из атрибута data-picture-id
-
-    const photoData = localData.find((item) => item.id === id); // Находим данные фото в локальном массиве
-
-    openModal(photoData); // Открываем модальное окно с фото
+    const id = Number(card.dataset.pictureId);
+    const photoData = localData.find((item) => item.id === id);
+    if (photoData) {
+      openModal(photoData);
+    } else {
+      showAlert(ErrorText.MESSAGE_NO_DATA_FOR_MODAL);
+    }
   }
 });
 
-// Экспортируем функцию для отрисовки миниатюр фото на странице
 export { renderCards };

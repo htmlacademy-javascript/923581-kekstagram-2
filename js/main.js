@@ -1,10 +1,15 @@
-import { generatePhotos } from './data.js';
 import { renderCards } from './thumbnails.js';
-import './image-upload-form.js';
-import './effect-level-slider.js';
-import './image-effects.js';
-import './image-scale.js';
+import { showAlert } from './util.js';
+import { setUserFormSubmit, closeImageEditor } from './image-upload-form.js';
+import { getData } from './api.js';
+import { ErrorText } from './constants.js';
 
-// Генерация массива фотографий
-const photos = generatePhotos();
-renderCards(photos);
+getData()
+  .then((photos) => {
+    renderCards(photos);
+  })
+  .catch(() => {
+    showAlert(ErrorText.GET_DATA);
+  });
+
+setUserFormSubmit(closeImageEditor);

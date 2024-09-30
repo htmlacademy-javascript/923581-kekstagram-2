@@ -1,54 +1,34 @@
-// image-effects.js
+import { Effects } from './constants.js';
 import { onSmallerClick, onBiggerClick } from './image-utils.js';
+import { initScaleControls } from './image-utils.js';
 
-// Объект, содержащий эффекты и их соответствующие CSS-фильтры
-const effects = {
-  none: { name: 'none', filter: 'none' },
-  chrome: { name: 'chrome', filter: 'grayscale(1)' },
-  sepia: { name: 'sepia', filter: 'sepia(1)' },
-  marvin: { name: 'marvin', filter: 'invert(100%)' },
-  phobos: { name: 'phobos', filter: 'blur(3px)' },
-  heat: { name: 'heat', filter: 'brightness(3)' },
-};
+// Инициализация элементов управления масштабом фотографии
+initScaleControls();
+
+// Получаем элементы изображения и уровня эффекта
+const imgElement = document.querySelector('.img-upload__preview img');
+const effectLevelInput = document.querySelector('.effect-level__value');
 
 // Функция для применения эффекта к изображению
-const applyEffect = (imgElement, effect) => {
-  imgElement.style.filter = effect.filter;
+const applyEffect = (effect) => {
+  imgElement.style.filter = `${effect.filter}(${effectLevelInput.value}${effect.units})`;
 };
 
-// Функция для обработки изменения эффекта
-const onEffectChange = (evt) => {
-  const imgElement = document.querySelector('.img-upload__preview img');
-  const effectLevelInput = document.querySelector('.effect-level__value');
-
-  if (!imgElement) {
-    return;
-  }
-
-  const selectedEffect = evt.target.value;
-
-  if (effects[selectedEffect]) {
-    applyEffect(imgElement, effects[selectedEffect]);
-    effectLevelInput.value = selectedEffect === 'none' ? 0 : 100; // Устанавливаем значение в зависимости от выбранного эффекта
-    updateSliderValue(effectLevelInput.value);
-  } else {
-    applyEffect(imgElement, effects.none);
-    effectLevelInput.value = 0;
-    updateSliderValue(0);
-  }
-};
-
-// Функция для обновления значения слайдера
-function updateSliderValue(value) {
-  const sliderElement = document.querySelector('.effect-level__slider');
-  if (sliderElement) {
-    sliderElement.noUiSlider.set(value);
-  }
-}
-
-// Добавление слушателей событий
-document.querySelector('.effects__list').addEventListener('change', onEffectChange);
+// Добавляем обработчики событий для кнопок изменения масштаба
 document.querySelector('.scale__control--smaller').addEventListener('click', onSmallerClick);
 document.querySelector('.scale__control--bigger').addEventListener('click', onBiggerClick);
 
-export { onEffectChange };
+// Функция для рендеринга изображения с эффектом
+export const renderEffectImage = () => {
+  const effectType = document.querySelector('.effects__radio:checked').value;
+
+  imgElement.className = '';
+  imgElement.classList.add(`effects__preview--${effectType}`);
+  applyEffect(Effects[effectType]);
+};
+
+// Функция для сброса изображения к исходному состоянию
+export const resetImage = () => {
+  imgElement.style.filter = '';
+  imgElement.className = '';
+};

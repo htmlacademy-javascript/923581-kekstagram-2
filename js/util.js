@@ -1,3 +1,5 @@
+import { closeModal } from './photo-modal.js';
+
 // Функция для проверки длины строки
 const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols;
 
@@ -15,9 +17,9 @@ const isEnterKey = (evt) => evt.key === 'Enter';
 
 // Обработчик события на нажатие клавиши на всем документе
 function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt) || isEnterKey(evt)) { // Проверяем, была ли нажата клавиша Escape или Enter
-    evt.preventDefault(); // Отменяем стандартное действие браузера
-    closeModal(); // Закрываем модальное окно
+  if (isEscapeKey(evt) || isEnterKey(evt)) {
+    evt.preventDefault();
+    closeModal();
   }
 }
 
@@ -32,7 +34,29 @@ const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
   }
 };
 
-// Экспортируем функции для использования в других модулях
+const ALERT_SHOW_TIME = 5000;
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+
 export {
   getRandomInt,
   getRandomElement,
@@ -40,5 +64,6 @@ export {
   isEnterKey,
   isEscapeKey,
   onDocumentKeydown,
-  numDecline
+  numDecline,
+  showAlert
 };
