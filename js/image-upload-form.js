@@ -1,9 +1,9 @@
-import { isEscapeKey, showAlert } from './util.js';
+import { isEscapeKey } from './util.js';
 import { resetSlider } from './effect-level-slider.js';
 import { updateScale, initScaleControls } from './image-utils.js';
 import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
 import { sendData } from './api.js';
-import { displayErrorMessage } from './error-message.js';
+import { openPopup } from './popup.js';
 
 // Инициализация управления масштабом фотографии
 initScaleControls();
@@ -22,7 +22,7 @@ const SubmitButtonText = {
 };
 
 // Обработчик закрытия формы редактирования
-const onCloseButtonClick = () => onImageEditingFormClose();
+const onCloseButtonClick = () => closeImageEditor();
 
 // Обработчик нажатий клавиш
 const onDocumentKeydown = (evt) => {
@@ -31,13 +31,13 @@ const onDocumentKeydown = (evt) => {
     if (document.activeElement === hashtagInput || document.activeElement === descriptionInput) {
       evt.stopPropagation();
     } else {
-      onImageEditingFormClose();
+      closeImageEditor();
     }
   }
 };
 
 // Функция закрытия формы редактирования
-function onImageEditingFormClose() {
+function closeImageEditor() {
   document.body.classList.remove('modal-open');
   imageEditingForm.classList.add('hidden');
   effectLevelControl.classList.add('hidden');
@@ -74,36 +74,28 @@ const onPhotoSelect = () => {
 uploadFileStart.addEventListener('change', onPhotoSelect);
 // uploadForm.addEventListener('submit', onFormSubmit);
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
+const blockSubmitButton = (isBlocked = true) => {
+  submitButton.disabled = isBlocked;
+  submitButton.textContent = isBlocked ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
 };
 
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
-
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     if (isValid()) {
-      blockSubmitButton();
+      blockSubmitButton(true);
       sendData(new FormData(evt.target))
-        .then(onSuccess)
-        .catch((err) => {
-          // Используем заголовок и кнопку из шаблона для отображения ошибки
-          displayErrorMessage({
-            title: 'Ошибка загрузки файла',
-            buttonText: 'Попробовать ещё раз',
-            formData: new FormData(evt.target) // Здесь можно сохранить данные формы
-          });
+        .then((() => {
+          closeImageEditor();
+          openPopup('success');
+        }))
+        .catch(() => {
+          openPopup('error');
         })
-        .finally(unblockSubmitButton);
+        .finally(blockSubmitButton(false));
     }
   });
 };
 
 
-export { setUserFormSubmit, onImageEditingFormClose };
+export { setUserFormSubmit, closeImageEditor };

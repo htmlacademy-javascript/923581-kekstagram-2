@@ -1,6 +1,6 @@
 
 // Конфигурация диапазонов
-const Ranges = {
+export const Ranges = {
   PHOTOS: { MIN: 1, MAX: 25 },
   LIKES: { MIN: 15, MAX: 200 },
   COMMENTS: { MIN: 0, MAX: 30 },
@@ -17,4 +17,9 @@ export const Effects = {
   heat: { filter: 'brightness', units: '', step: 0.1, min: 1, max: 3 },
 };
 
-export { Ranges };
+export const ErrorText = {
+  GET_DATA: 'Ошибка загрузки данных',
+  ERROR_INVALID_DATA: 'Некорректные данные',
+  MESSAGE_NO_DATA_FOR_MODAL: 'Нет данных для модального окна',
+};
+
