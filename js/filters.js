@@ -1,13 +1,12 @@
 import { renderCards } from './thumbnails.js';
 import { getRandomImages } from './util.js'; // Импорт функции для получения случайных изображений
-import { getData } from './api.js'; // Импорт функции для получения данных с сервера
 import { openPopup } from './popup.js';
 
 // Функция для показа фильтров после загрузки изображений
 export function showFilters() {
   const imgFilters = document.querySelector('.img-filters');
   imgFilters.classList.remove('img-filters--inactive'); // Убираем скрывающий класс
-}
+};
 
 // Функция для сброса активности кнопок фильтров
 function resetFilterButtons() {
@@ -15,7 +14,7 @@ function resetFilterButtons() {
   buttons.forEach(button => {
     button.classList.remove('img-filters__button--active');
   });
-}
+};
 
 // Функция для настройки кнопок фильтров
 export function setupFilterButtons(photos) {
@@ -46,17 +45,5 @@ export function setupFilterButtons(photos) {
     const discussedImages = [...photos].sort((a, b) => b.comments.length - a.comments.length);
     renderCards(discussedImages); // Отображаем изображения, отсортированные по количеству комментариев
   });
-}
+};
 
-// Функция для инициализации фильтров после загрузки данных с сервера
-export function initFilters() {
-  getData()
-    .then((photos) => {
-      setupFilterButtons(photos); // Настраиваем кнопки фильтров с загруженными данными
-      renderCards(photos); // Отображаем фотографии по умолчанию
-      showFilters(); // Показываем фильтры
-    })
-    .catch(() => {
-      openPopup('error');
-    });
-}

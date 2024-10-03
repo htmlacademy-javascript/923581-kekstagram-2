@@ -6,13 +6,12 @@ import { showFilters, setupFilterButtons } from './filters.js';
 
 getData()
   .then((photos) => {
-    renderCards(photos); // Отображаем фотографии
+    setupFilterButtons(photos); // Настраиваем кнопки фильтров с загруженными данными
+    renderCards(photos); // Отображаем фотографии по умолчанию
     showFilters(); // Показываем фильтры
-    setupFilterButtons(photos); // Передаем загруженные фотографии в функцию настройки фильтров
   })
   .catch(() => {
     showAlert(); // Показываем сообщение об ошибке
   });
-
 
 setUserFormSubmit(closeImageEditor);
