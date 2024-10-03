@@ -1,6 +1,4 @@
 import { openModal } from './photo-modal.js';
-import { showAlert } from './util.js';
-import { ErrorText } from './api.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const bigPictureNode = document.querySelector('.pictures');
@@ -9,7 +7,6 @@ const localData = [];
 // Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
   if (!Array.isArray(data) || data.length === 0) {
-    showAlert(ErrorText.ERROR_INVALID_DATA);
     return;
   }
 
@@ -48,9 +45,8 @@ bigPictureNode.addEventListener('click', (evt) => {
     const photoData = localData.find((item) => item.id === id);
     if (photoData) {
       openModal(photoData);
-    } else {
-      showAlert(ErrorText.MESSAGE_NO_DATA_FOR_MODAL);
     }
+    return;
   }
 });
 

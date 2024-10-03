@@ -3,7 +3,7 @@ const errorTemplate = document.querySelector('#error').content.querySelector('.e
 
 const templates = {
   success: successTemplate,
-  error: errorTemplate
+  error: errorTemplate,
 };
 
 const openPopup = (type = 'success') => {
