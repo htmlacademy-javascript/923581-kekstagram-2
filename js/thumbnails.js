@@ -46,7 +46,6 @@ bigPictureNode.addEventListener('click', (evt) => {
     if (photoData) {
       openModal(photoData);
     }
-    return;
   }
 });
 

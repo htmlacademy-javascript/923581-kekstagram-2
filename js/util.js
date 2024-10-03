@@ -52,6 +52,26 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+// const showAlert = (message) => {
+//   if (!dataErrorTemplate) {
+//     return; // Выход, если шаблон не найден
+//   }
+
+//   const popup = dataErrorTemplate.cloneNode(true);
+
+//   // Добавляем сообщение в элемент
+//   const messageElement = popup.querySelector('.data-error__title'); // Предполагается, что у вас есть элемент для сообщения
+//   if (messageElement) {
+//     messageElement.textContent = message; // Устанавливаем текст сообщения
+//   }
+
+//   document.body.append(popup);
+
+//   setTimeout(() => {
+//     popup.remove();
+//   }, ALERT_SHOW_TIME);
+// };
+
 
 // Функция для получения случайных изображений
 function getRandomImages(arr, count) {
