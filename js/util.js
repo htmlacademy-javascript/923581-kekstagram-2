@@ -53,6 +53,15 @@ const showAlert = (message) => {
 };
 
 
+// Функция для получения случайных изображений
+function getRandomImages(arr, count) {
+  // Перемешивание массива
+  const shuffled = arr.sort(() => 0.5 - Math.random());
+
+  // Возврат первых count элементов из перемешанного массива
+  return shuffled.slice(0, count);
+}
+
 export {
   getRandomInt,
   getRandomElement,
@@ -62,4 +71,5 @@ export {
   onDocumentKeydown,
   numDecline,
   showAlert,
+  getRandomImages
 };

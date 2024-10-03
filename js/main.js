@@ -2,15 +2,17 @@ import { renderCards } from './thumbnails.js';
 import { showAlert } from './util.js';
 import { setUserFormSubmit, closeImageEditor } from './image-upload-form.js';
 import { getData } from './api.js';
-import { showFilters } from './filters.js';
+import { showFilters, setupFilterButtons } from './filters.js';
 
 getData()
   .then((photos) => {
-    renderCards(photos);
+    renderCards(photos); // Отображаем фотографии
+    showFilters(); // Показываем фильтры
+    setupFilterButtons(photos); // Передаем загруженные фотографии в функцию настройки фильтров
   })
   .catch(() => {
-    showAlert();
+    showAlert(); // Показываем сообщение об ошибке
   });
-  
-showFilters();
+
+
 setUserFormSubmit(closeImageEditor);
