@@ -97,5 +97,4 @@ const setUserFormSubmit = () => {
   });
 };
 
-
 export { setUserFormSubmit, closeImageEditor };
