@@ -2,6 +2,15 @@ import { renderCards } from './thumbnails.js';
 import { getRandomImages } from './util.js'; // Импорт функции для получения случайных изображений
 import { openPopup } from './popup.js';
 
+function debounce(callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 // Функция для показа фильтров после загрузки изображений
 export function showFilters() {
   const imgFilters = document.querySelector('.img-filters');
@@ -24,14 +33,14 @@ export function setupFilterButtons(photos) {
   const discussedButton = document.getElementById('filter-discussed');
 
   // Обработчик события для кнопки "По умолчанию"
-  defaultButton.addEventListener('click', () => {
+  defaultButton.addEventListener('click', debounce(() => {
     resetFilterButtons(); // Сбрасываем активные кнопки
     defaultButton.classList.add('img-filters__button--active'); // Добавляем активный класс
     renderCards(originalPhotos); // Отображаем фотографии в исходном порядке
-  });
+  }));
 
   // Обработчик события для кнопки "Случайные"
-  randomButton.addEventListener('click', () => {
+  randomButton.addEventListener('click', debounce(() => {
     resetFilterButtons(); // Сбрасываем активные кнопки
     randomButton.classList.add('img-filters__button--active'); // Добавляем активный класс
     try {
@@ -40,13 +49,13 @@ export function setupFilterButtons(photos) {
     } catch (error) {
       openPopup('error'); // Показываем ошибку при возникновении проблемы
     }
-  });
+  }));
 
   // Обработчик события для кнопки "Обсуждаемые"
-  discussedButton.addEventListener('click', () => {
+  discussedButton.addEventListener('click', debounce(() => {
     resetFilterButtons(); // Сбрасываем активные кнопки
     discussedButton.classList.add('img-filters__button--active'); // Добавляем активный класс
     const discussedImages = [...photos].sort((a, b) => b.comments.length - a.comments.length);
     renderCards(discussedImages); // Отображаем изображения, отсортированные по количеству комментариев
-  });
+  }));
 }

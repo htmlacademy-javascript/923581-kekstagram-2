@@ -7,12 +7,12 @@ import './photo-upload.js';
 
 getData()
   .then((photos) => {
-    setupFilterButtons(photos); // Настраиваем кнопки фильтров с загруженными данными
-    renderCards(photos); // Отображаем фотографии по умолчанию
-    showFilters(); // Показываем фильтры
+    setupFilterButtons(photos);
+    renderCards(photos);
+    showFilters();
   })
   .catch(() => {
-    showAlert(); // Показываем сообщение об ошибке
+    showAlert();
   });
 
 setUserFormSubmit(closeImageEditor);
