@@ -64,7 +64,7 @@ const onPhotoSelect = () => {
   document.body.classList.add('modal-open');
   imageEditingForm.classList.remove('hidden');
   resetSlider();
-  updateScale();
+  updateScale(true);
 
   // Добавляем обработчики событий при открытии формы редактирования
   addEventListeners();

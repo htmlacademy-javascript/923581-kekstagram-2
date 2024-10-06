@@ -12,7 +12,11 @@ hiddenScaleInput.name = 'scale';
 document.querySelector('.img-upload__form').appendChild(hiddenScaleInput);
 
 //  Обновляет масштаб изображения и значение скрытого поля.
-export const updateScale = () => {
+export const updateScale = (reset = false) => {
+  if (reset) {
+    currentScale = MAX_SCALE; // Сбрасываем масштаб
+  }
+
   const imgElement = document.querySelector('.img-upload__preview img');
 
   if (imgElement) {
