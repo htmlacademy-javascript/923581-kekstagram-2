@@ -7,9 +7,7 @@ fileChooser.addEventListener('change', () => {
   const file = fileChooser.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
-  console.log('object');
   if (matches) {
-    console.log('object');
     preview.src = URL.createObjectURL(file);
   }
 });
