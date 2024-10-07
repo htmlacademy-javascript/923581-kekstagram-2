@@ -17,7 +17,8 @@ noUiSlider.create(slider, {
 
 // Обновление значения эффекта при изменении слайдера
 slider.noUiSlider.on('update', () => {
-  effectLevelInput.value = slider.noUiSlider.get();
+  const value = parseFloat(slider.noUiSlider.get()); // Получаем значение в виде числа
+  effectLevelInput.value = Number.isInteger(value) ? value.toString() : value.toFixed(1); // Устанавливаем значение в нужном формате
   renderEffectImage();
 });
 
