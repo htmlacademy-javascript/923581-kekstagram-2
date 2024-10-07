@@ -5,6 +5,8 @@ import { getData } from './api.js';
 import { showFilters, setupFilterButtons } from './filters.js';
 import './photo-upload.js';
 
+setUserFormSubmit(closeImageEditor);
+
 getData()
   .then((photos) => {
     setupFilterButtons(photos);
@@ -15,4 +17,4 @@ getData()
     showAlert();
   });
 
-setUserFormSubmit(closeImageEditor);
+
