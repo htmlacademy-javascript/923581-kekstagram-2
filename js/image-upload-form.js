@@ -92,7 +92,7 @@ const setUserFormSubmit = () => {
         .catch(() => {
           openPopup('error');
         })
-        .finally(blockSubmitButton(false));
+        .finally(() => blockSubmitButton(false));
     }
   });
 };
