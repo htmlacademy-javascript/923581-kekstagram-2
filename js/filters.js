@@ -1,61 +1,44 @@
 import { renderCards } from './thumbnails.js';
-import { getRandomImages } from './util.js'; // Импорт функции для получения случайных изображений
-import { openPopup } from './popup.js';
+import { getRandomImages, debounce } from './util.js'; // Импорт функции для получения случайных изображений
+import { Filters } from './constants.js';
 
-function debounce(callback, timeoutDelay = 500) {
-  let timeoutId;
+const filterForm = document.querySelector('.img-filters__form');
 
-  return (...rest) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
-  };
-}
+let filter = Filters.DEFAULT;
+let localPhotos = [];
 
 // Функция для показа фильтров после загрузки изображений
-export function showFilters() {
+const showFilters = () => {
   const imgFilters = document.querySelector('.img-filters');
   imgFilters.classList.remove('img-filters--inactive'); // Убираем скрывающий класс
-}
+};
 
-// Функция для сброса активности кнопок фильтров
-function resetFilterButtons() {
-  const buttons = document.querySelectorAll('.img-filters__button');
-  buttons.forEach((button) => {
-    button.classList.remove('img-filters__button--active');
-  });
-}
+const setActiveButton = (button) => {
+  filterForm.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
+  button.classList.add('img-filters__button--active');
+};
+
+filterForm.addEventListener('click', ({ target }) => {
+  if (target.closest('.img-filters__button')) {
+    setActiveButton(target);
+  }
+});
+
+const filtersSet = {
+  [Filters.DEFAULT]: () => localPhotos,
+  [Filters.RANDOM]: () => getRandomImages([...localPhotos], 10),
+  [Filters.DISCUSSED]: () => [...localPhotos].sort((a, b) => b.comments.length - a.comments.length)
+};
+
+filterForm.addEventListener('click', debounce(({ target }) => {
+  if (target.closest('.img-filters__button')) {
+    filter = target.id;
+    renderCards(filtersSet[filter]());
+  }
+}, 500));
 
 // Функция для настройки кнопок фильтров
-export function setupFilterButtons(photos) {
-  const originalPhotos = [...photos]; // Сохраняем оригинальный массив фотографий
-  const defaultButton = document.getElementById('filter-default');
-  const randomButton = document.getElementById('filter-random');
-  const discussedButton = document.getElementById('filter-discussed');
-
-  // Обработчик события для кнопки "По умолчанию"
-  defaultButton.addEventListener('click', debounce(() => {
-    resetFilterButtons(); // Сбрасываем активные кнопки
-    defaultButton.classList.add('img-filters__button--active'); // Добавляем активный класс
-    renderCards(originalPhotos); // Отображаем фотографии в исходном порядке
-  }));
-
-  // Обработчик события для кнопки "Случайные"
-  randomButton.addEventListener('click', debounce(() => {
-    resetFilterButtons(); // Сбрасываем активные кнопки
-    randomButton.classList.add('img-filters__button--active'); // Добавляем активный класс
-    try {
-      const randomImages = getRandomImages(photos, 10);
-      renderCards(randomImages); // Отображаем 10 случайных изображений
-    } catch (error) {
-      openPopup('error'); // Показываем ошибку при возникновении проблемы
-    }
-  }));
-
-  // Обработчик события для кнопки "Обсуждаемые"
-  discussedButton.addEventListener('click', debounce(() => {
-    resetFilterButtons(); // Сбрасываем активные кнопки
-    discussedButton.classList.add('img-filters__button--active'); // Добавляем активный класс
-    const discussedImages = [...photos].sort((a, b) => b.comments.length - a.comments.length);
-    renderCards(discussedImages); // Отображаем изображения, отсортированные по количеству комментариев
-  }));
-}
+export const initFilters = (photos) => {
+  showFilters();
+  localPhotos = [...photos]; // Сохраняем оригинальный массив фотографий
+};

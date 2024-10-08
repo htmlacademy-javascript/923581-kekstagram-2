@@ -12,13 +12,20 @@ const sliderContainer = document.querySelector('.effect-level');
 noUiSlider.create(slider, {
   start: 100,
   range: { min: 0, max: 100 },
-  connect: 'lower'
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return parseFloat(value);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
 });
 
 // Обновление значения эффекта при изменении слайдера
 slider.noUiSlider.on('update', () => {
-  const value = parseFloat(slider.noUiSlider.get()); // Получаем значение в виде числа
-  effectLevelInput.value = Number.isInteger(value) ? value.toString() : value.toFixed(1); // Устанавливаем значение в нужном формате
+  effectLevelInput.value = slider.noUiSlider.get(); // Получаем значение в виде числа
   renderEffectImage();
 });
 

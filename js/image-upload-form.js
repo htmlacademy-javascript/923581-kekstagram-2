@@ -1,9 +1,10 @@
-import { isEscapeKey } from './util.js';
 import { resetSlider } from './effect-level-slider.js';
 import { updateScale, initScaleControls } from './image-utils.js';
-import { isValid, hashtagInput, descriptionInput } from './image-upload-form-validator.js';
+import { isValid, hashtagInput, descriptionInput, reset as resetValidation } from './image-upload-form-validator.js';
 import { sendData } from './api.js';
 import { openPopup } from './popup.js';
+import { setEscapeControl, removeEscapeControl } from './escape-control.js';
+import { resetImage } from './image-effects.js';
 
 // Инициализация управления масштабом фотографии
 initScaleControls();
@@ -22,18 +23,9 @@ const SubmitButtonText = {
 };
 
 // Обработчик закрытия формы редактирования
-const onCloseButtonClick = () => closeImageEditor();
-
-// Обработчик нажатий клавиш
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    if (document.activeElement === hashtagInput || document.activeElement === descriptionInput) {
-      evt.stopPropagation();
-    } else {
-      closeImageEditor();
-    }
-  }
+const onCloseButtonClick = () => {
+  closeImageEditor();
+  removeEscapeControl();
 };
 
 // Функция закрытия формы редактирования
@@ -42,6 +34,7 @@ function closeImageEditor() {
   imageEditingForm.classList.add('hidden');
   effectLevelControl.classList.add('hidden');
   uploadForm.reset();
+  resetValidation();
 
   // Удаление обработчиков событий
   removeEventListeners();
@@ -50,51 +43,52 @@ function closeImageEditor() {
 // Добавление обработчиков событий
 function addEventListeners() {
   imageEditingFormClose.addEventListener('click', onCloseButtonClick);
-  document.addEventListener('keydown', onDocumentKeydown);
 }
 
 // Удаление обработчиков событий
 function removeEventListeners() {
-  document.removeEventListener('keydown', onDocumentKeydown);
   imageEditingFormClose.removeEventListener('click', onCloseButtonClick);
 }
+
+const canCloseForm = () => !(document.activeElement === hashtagInput || document.activeElement === descriptionInput);
 
 // Функция выбора фотографии
 const onPhotoSelect = () => {
   document.body.classList.add('modal-open');
   imageEditingForm.classList.remove('hidden');
+  resetImage();
   resetSlider();
   updateScale(true);
 
   // Добавляем обработчики событий при открытии формы редактирования
   addEventListeners();
+  setEscapeControl(closeImageEditor, canCloseForm);
 };
 
 // Добавление обработчиков событий к элементам формы
 uploadFileStart.addEventListener('change', onPhotoSelect);
-// uploadForm.addEventListener('submit', onFormSubmit);
 
 const blockSubmitButton = (isBlocked = true) => {
   submitButton.disabled = isBlocked;
   submitButton.textContent = isBlocked ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
 };
 
-const setUserFormSubmit = () => {
-  uploadForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    if (isValid()) {
-      blockSubmitButton(true);
-      sendData(new FormData(evt.target))
-        .then((() => {
-          closeImageEditor();
-          openPopup('success');
-        }))
-        .catch(() => {
-          openPopup('error');
-        })
-        .finally(() => blockSubmitButton(false));
-    }
-  });
-};
 
-export { setUserFormSubmit, closeImageEditor };
+uploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  if (isValid()) {
+    blockSubmitButton(true);
+    sendData(new FormData(evt.target))
+      .then((() => {
+        closeImageEditor();
+        openPopup('success');
+      }))
+      .catch(() => {
+        openPopup('error');
+      })
+      .finally(() => blockSubmitButton(false));
+  }
+});
+
+
+export { closeImageEditor };

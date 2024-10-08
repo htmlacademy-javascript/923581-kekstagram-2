@@ -1,4 +1,3 @@
-
 // Конфигурация диапазонов
 export const Ranges = {
   PHOTOS: { MIN: 1, MAX: 25 },
@@ -17,4 +16,8 @@ export const Effects = {
   heat: { filter: 'brightness', units: '', step: 0.1, min: 1, max: 3 },
 };
 
-
+export const Filters = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};

@@ -50,6 +50,15 @@ function getRandomImages(arr, count) {
   return shuffled.slice(0, count);
 }
 
+function debounce(callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 export {
   getRandomInt,
   getRandomElement,
@@ -60,5 +69,6 @@ export {
   numDecline,
   showAlert,
   getRandomImages,
-  titleElement
+  titleElement,
+  debounce
 };
