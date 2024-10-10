@@ -1,5 +1,5 @@
 import { renderCards } from './thumbnails.js';
-import { getRandomImages, debounce } from './util.js'; // Импорт функции для получения случайных изображений
+import { getRandomImages, debounce } from './util.js';
 import { Filters } from './constants.js';
 
 const filterForm = document.querySelector('.img-filters__form');
@@ -7,10 +7,9 @@ const filterForm = document.querySelector('.img-filters__form');
 let filter = Filters.DEFAULT;
 let localPhotos = [];
 
-// Функция для показа фильтров после загрузки изображений
 const showFilters = () => {
   const imgFilters = document.querySelector('.img-filters');
-  imgFilters.classList.remove('img-filters--inactive'); // Убираем скрывающий класс
+  imgFilters.classList.remove('img-filters--inactive');
 };
 
 const setActiveButton = (button) => {
@@ -37,8 +36,7 @@ filterForm.addEventListener('click', debounce(({ target }) => {
   }
 }, 500));
 
-// Функция для настройки кнопок фильтров
 export const initFilters = (photos) => {
   showFilters();
-  localPhotos = [...photos]; // Сохраняем оригинальный массив фотографий
+  localPhotos = [...photos];
 };

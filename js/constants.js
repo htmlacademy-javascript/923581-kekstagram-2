@@ -1,4 +1,3 @@
-// Конфигурация диапазонов
 export const Ranges = {
   PHOTOS: { MIN: 1, MAX: 25 },
   LIKES: { MIN: 15, MAX: 200 },
@@ -6,7 +5,6 @@ export const Ranges = {
   AVATARS: { MIN: 1, MAX: 6 },
 };
 
-// объект для хранения различных эффектов обработки изображений
 export const Effects = {
   none: { filter: 'none', units: '' },
   chrome: { filter: 'grayscale', units: '', step: 0.1, min: 0, max: 1 },
@@ -21,3 +19,5 @@ export const Filters = {
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
 };
+
+

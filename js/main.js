@@ -13,5 +13,3 @@ getData()
   .catch(() => {
     showAlert();
   });
-
-

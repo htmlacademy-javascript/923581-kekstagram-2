@@ -6,7 +6,6 @@ const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
 const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-// Обработчик события на нажатие клавиши на всем документе
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt) || isEnterKey(evt)) {
     evt.preventDefault();
@@ -14,7 +13,6 @@ function onDocumentKeydown(evt) {
   }
 }
 
-// Функция для склонения числительных
 const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
   if (num % 10 === 1 && num % 100 !== 11) {
     return nominative;
@@ -44,7 +42,6 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-// Функция для получения случайных изображений
 function getRandomImages(arr, count) {
   const shuffled = arr.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);

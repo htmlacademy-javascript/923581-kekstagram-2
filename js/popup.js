@@ -10,7 +10,7 @@ const templates = {
 
 const openPopup = (type = 'success') => {
   if (!templates[type]) {
-    return; // Выход, если шаблон не найден
+    return;
   }
   const popup = templates[type].cloneNode(true);
   document.body.append(popup);
