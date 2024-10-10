@@ -13,3 +13,5 @@ getData()
   .catch(() => {
     showAlert();
   });
+
+// setUserFormSubmit(closeImageEditor);

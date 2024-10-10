@@ -1,3 +1,4 @@
+
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const fileChooser = document.querySelector('#upload-file');
 const preview = document.querySelector('.img-upload__preview img');
@@ -13,6 +14,7 @@ fileChooser.addEventListener('change', () => {
   }
 
   radioPreviews.forEach((item) => {
-    item.style.backgroundImage = `url(${imageUrl})`;
-  });
+    item.style.backgroundImage = `url(${imageUrl})`
+  })
 });
+
