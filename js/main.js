@@ -14,4 +14,3 @@ getData()
     showAlert();
   });
 
-// setUserFormSubmit(closeImageEditor);

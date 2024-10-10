@@ -1,5 +1,3 @@
-import { isEscapeKey } from "./util.js";
-
 const closeFunctions = [];
 let escListener = null;
 
@@ -17,7 +15,7 @@ const onDocumentEscape = (evt) => {
       escListener = document.removeEventListener('keydown', onDocumentEscape);
     }
   }
-}
+};
 
 export const setEscapeControl = (closeFunction, condition = null) => {
   closeFunctions.push({
@@ -26,7 +24,7 @@ export const setEscapeControl = (closeFunction, condition = null) => {
   });
 
   if (!escListener) {
-    escListener = document.addEventListener('keydown', onDocumentEscape)
+    escListener = document.addEventListener('keydown', onDocumentEscape);
   }
 };
 
@@ -35,4 +33,4 @@ export const removeEscapeControl = () => {
   if (!closeFunctions.length) {
     escListener = document.removeEventListener('keydown', onDocumentEscape);
   }
-}
+};

@@ -4,7 +4,6 @@ const template = document.querySelector('#picture').content.querySelector('.pict
 const bigPictureNode = document.querySelector('.pictures');
 const localData = [];
 
-// Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
   if (!Array.isArray(data) || data.length === 0) {
     return;
@@ -26,7 +25,6 @@ const renderCards = (data) => {
 
     thumbnail.querySelector('.picture__likes').textContent = photo.likes || 0;
 
-    // Проверяем наличие комментариев и отображаем их количество
     const commentsCount = photo.comments?.length || 0;
     thumbnail.querySelector('.picture__comments').textContent = commentsCount;
     thumbnail.dataset.pictureId = photo.id;
@@ -36,7 +34,6 @@ const renderCards = (data) => {
   bigPictureNode.appendChild(fragment);
 };
 
-// Добавляем обработчик события на клик по миниатюре фото
 bigPictureNode.addEventListener('click', (evt) => {
   const card = evt.target.closest('.picture');
 
