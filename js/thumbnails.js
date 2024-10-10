@@ -1,15 +1,11 @@
 import { openModal } from './photo-modal.js';
-import { showAlert } from './util.js';
-import { ErrorText } from './api.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const bigPictureNode = document.querySelector('.pictures');
 const localData = [];
 
-// Функция для отрисовки миниатюр фото на странице
 const renderCards = (data) => {
   if (!Array.isArray(data) || data.length === 0) {
-    showAlert(ErrorText.ERROR_INVALID_DATA);
     return;
   }
 
@@ -29,7 +25,6 @@ const renderCards = (data) => {
 
     thumbnail.querySelector('.picture__likes').textContent = photo.likes || 0;
 
-    // Проверяем наличие комментариев и отображаем их количество
     const commentsCount = photo.comments?.length || 0;
     thumbnail.querySelector('.picture__comments').textContent = commentsCount;
     thumbnail.dataset.pictureId = photo.id;
@@ -39,7 +34,6 @@ const renderCards = (data) => {
   bigPictureNode.appendChild(fragment);
 };
 
-// Добавляем обработчик события на клик по миниатюре фото
 bigPictureNode.addEventListener('click', (evt) => {
   const card = evt.target.closest('.picture');
 
@@ -48,8 +42,6 @@ bigPictureNode.addEventListener('click', (evt) => {
     const photoData = localData.find((item) => item.id === id);
     if (photoData) {
       openModal(photoData);
-    } else {
-      showAlert(ErrorText.MESSAGE_NO_DATA_FOR_MODAL);
     }
   }
 });

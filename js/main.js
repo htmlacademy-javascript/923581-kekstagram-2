@@ -1,15 +1,16 @@
 import { renderCards } from './thumbnails.js';
 import { showAlert } from './util.js';
-import { setUserFormSubmit, closeImageEditor } from './image-upload-form.js';
+import './image-upload-form.js';
 import { getData } from './api.js';
-import { ErrorText } from './constants.js';
+import { initFilters } from './filters.js';
+import './photo-upload.js';
 
 getData()
   .then((photos) => {
+    initFilters(photos);
     renderCards(photos);
   })
   .catch(() => {
-    showAlert(ErrorText.GET_DATA);
+    showAlert();
   });
 
-setUserFormSubmit(closeImageEditor);

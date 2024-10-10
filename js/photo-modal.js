@@ -1,8 +1,8 @@
-// Импортируем необходимые функции из других модулей
-import { isEnterKey, onDocumentKeydown } from './util.js';
+import { isEnterKey } from './util.js';
 import { renderComments, loadMoreComments, setLocalComments } from './creating-comments.js';
+import { setEscapeControl, removeEscapeControl } from './escape-control.js';
 
-// Находим элементы на странице
+
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const socialCaption = bigPicture.querySelector('.social__caption');
@@ -12,7 +12,6 @@ const socialComments = bigPicture.querySelector('.social__comments');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 const socialHeaderPicture = socialComments.querySelector('.social__picture');
 
-// Функция для отображения модального окна с фото
 const renderModal = ({ url, description, likes, avatar, avatarAlt }) => {
   bigPictureImg.src = url;
   socialCaption.textContent = description;
@@ -23,18 +22,19 @@ const renderModal = ({ url, description, likes, avatar, avatarAlt }) => {
   renderComments();
 };
 
-// Функция для показа модального окна
+const closeModal = () => {
+  bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+};
+
 const showModal = () => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
   bigPictureClose.tabIndex = 2;
   bigPicture.tabIndex = 1;
   bigPicture.focus();
-
-  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-// Функция для открытия модального окна с фото
 export const openModal = (photo) => {
   setLocalComments([...photo.comments]);
   renderModal({
@@ -45,36 +45,32 @@ export const openModal = (photo) => {
     avatarAlt: photo.avatarAlt
   });
   showModal();
+  setEscapeControl(closeModal);
 };
 
-// Функция для закрытия модального окна
-const closeModal = () => {
-  bigPicture.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-
-  document.removeEventListener('keydown', onDocumentKeydown);
-};
-
-// Обработчик события на клик по кнопке закрытия модального окна
 const onClosePhotoClick = (evt) => {
   if (evt.target === bigPicture) {
     closeModal();
+    removeEscapeControl();
   }
 };
 
-// Обработчик события на нажатие клавиши Enter при фокусе на кнопке закрытия модального окна
 const onClosePhotoKeydown = (evt) => {
   if (isEnterKey(evt)) {
     closeModal();
+    removeEscapeControl();
   }
 };
 
-// Добавляем обработчики событий на кнопку "Загрузить еще" и кнопку закрытия модального окна
+const onCloseButtonClick = () => {
+  closeModal();
+  removeEscapeControl();
+};
+
 commentsLoader.addEventListener('click', loadMoreComments);
-bigPictureClose.addEventListener('click', closeModal);
+bigPictureClose.addEventListener('click', onCloseButtonClick);
 bigPictureClose.addEventListener('keydown', onClosePhotoKeydown);
 
-// Добавляем обработчик события на клик по модальному окну для закрытия его
 bigPicture.addEventListener('click', onClosePhotoClick);
 
 export { closeModal };
