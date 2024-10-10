@@ -1,4 +1,5 @@
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+import { FILE_TYPES } from './constants.js';
+
 const fileChooser = document.querySelector('#upload-file');
 const preview = document.querySelector('.img-upload__preview img');
 const radioPreviews = document.querySelectorAll('.effects__preview');

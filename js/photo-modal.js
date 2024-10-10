@@ -2,7 +2,6 @@ import { isEnterKey } from './util.js';
 import { renderComments, loadMoreComments, setLocalComments } from './creating-comments.js';
 import { setEscapeControl, removeEscapeControl } from './escape-control.js';
 
-
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const socialCaption = bigPicture.querySelector('.social__caption');

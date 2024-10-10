@@ -1,4 +1,5 @@
 import { closeModal } from './photo-modal.js';
+import { ALERT_SHOW_TIME } from './constants.js';
 
 const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols;
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -22,8 +23,6 @@ const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
     return genitivePlural;
   }
 };
-
-const ALERT_SHOW_TIME = 5000;
 
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const titleElement = document.querySelector('#data-error').content.querySelector('.data-error__title');
