@@ -33,17 +33,17 @@ const isHashtagsValid = (value) => {
     return true;
   }
 
-  const inputArray = inputText.split(/\s+/);
+  const hashtags = inputText.split(/\s+/);
 
   const rules = [
-    { check: inputArray.some((item) => item.length === 0), error: 'Не может быть пустых хэштегов' },
-    { check: inputArray.some((item) => item.slice(1).includes('#')), error: 'Хэштеги не могут содержать символ \'#\' в середине' },
-    { check: inputArray.some((item) => item[0] !== '#'), error: 'Каждый хэштег должен начинаться с символа \'#\'' },
-    { check: inputArray.some((item) => item.length === 1), error: 'Хэштег не может состоять только из одного символа \'#\'' },
-    { check: new Set(inputArray).size !== inputArray.length, error: 'Хэштеги не могут повторяться' },
-    { check: inputArray.some((item) => item.length > MAX_SYMBOLS), error: `Максимальная длина одного хэштега ${MAX_SYMBOLS} символов, пожалуйста, исправьте` },
-    { check: inputArray.length > MAX_HASHTAGS, error: `Нельзя использовать больше ${MAX_HASHTAGS} ${numDecline(MAX_HASHTAGS, 'хештега', 'хештегов', 'хештегов')}` },
-    { check: inputArray.some((item) => !/^#[a-zA-Z0-9éА-Яа-яЁё]{1,19}$/i.test(item)), error: 'Хэштег содержит недопустимые символы' },
+    { check: hashtags.some((item) => item.length === 0), error: 'Не может быть пустых хэштегов' },
+    { check: hashtags.some((item) => item.slice(1).includes('#')), error: 'Хэштеги не могут содержать символ \'#\' в середине' },
+    { check: hashtags.some((item) => item[0] !== '#'), error: 'Каждый хэштег должен начинаться с символа \'#\'' },
+    { check: hashtags.some((item) => item.length === 1), error: 'Хэштег не может состоять только из одного символа \'#\'' },
+    { check: new Set(hashtags).size !== hashtags.length, error: 'Хэштеги не могут повторяться' },
+    { check: hashtags.some((item) => item.length > MAX_SYMBOLS), error: `Максимальная длина одного хэштега ${MAX_SYMBOLS} символов, пожалуйста, исправьте` },
+    { check: hashtags.length > MAX_HASHTAGS, error: `Нельзя использовать больше ${MAX_HASHTAGS} ${numDecline(MAX_HASHTAGS, 'хештега', 'хештегов', 'хештегов')}` },
+    { check: hashtags.some((item) => !/^#[a-zA-Z0-9éА-Яа-яЁё]{1,19}$/i.test(item)), error: 'Хэштег содержит недопустимые символы' },
   ];
 
   return rules.every((rule) => {

@@ -3,7 +3,7 @@ import { ALERT_SHOW_TIME } from './constants.js';
 
 const checkStringLength = (str = '', maxSymbols = 1) => str.length <= maxSymbols;
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
+const getRandomElement = (array) => array[getRandomInt(0, array.length - 1)];
 const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 const isEnterKey = (evt) => evt.key === 'Enter';
 
@@ -41,8 +41,8 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-function getRandomImages(arr, count) {
-  const shuffled = arr.sort(() => 0.5 - Math.random());
+function getRandomImages(imagesArray, count) {
+  const shuffled = imagesArray.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
 
