@@ -1,6 +1,4 @@
-export const SCALE_STEP = 0.25;
-export const MIN_SCALE = 0.25;
-export const MAX_SCALE = 1;
+import { SCALE_STEP, MIN_SCALE, MAX_SCALE } from './constants.js';
 
 let currentScale = MAX_SCALE;
 

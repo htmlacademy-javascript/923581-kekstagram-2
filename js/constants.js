@@ -1,4 +1,3 @@
-
 export const Ranges = {
   PHOTOS: { MIN: 1, MAX: 25 },
   LIKES: { MIN: 15, MAX: 200 },
@@ -20,3 +19,14 @@ export const Filters = {
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
 };
+
+export const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
+export const SCALE_STEP = 0.25;
+export const MIN_SCALE = 0.25;
+export const MAX_SCALE = 1;
+export const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+export const ALERT_SHOW_TIME = 5000;

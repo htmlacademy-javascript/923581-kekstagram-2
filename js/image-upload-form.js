@@ -4,6 +4,8 @@ import { isValid, hashtagInput, descriptionInput, reset as resetValidation } fro
 import { sendData } from './api.js';
 import { openPopup } from './popup.js';
 import { setEscapeControl, removeEscapeControl } from './escape-control.js';
+import { resetImage } from './image-effects.js';
+import { SubmitButtonText } from './constants.js';
 
 initScaleControls();
 
@@ -14,14 +16,17 @@ const imageEditingFormClose = uploadForm.querySelector('#upload-cancel');
 const effectLevelControl = uploadForm.querySelector('.img-upload__effect-level');
 const submitButton = uploadForm.querySelector('#upload-submit');
 
-const SubmitButtonText = {
-  IDLE: 'Опубликовать',
-  SENDING: 'Публикую...'
-};
-
 const onCloseButtonClick = () => {
   closeImageEditor();
   removeEscapeControl();
+};
+
+const attachEventListeners = () => {
+  imageEditingFormClose.addEventListener('click', onCloseButtonClick);
+};
+
+const detachEventListeners = () => {
+  imageEditingFormClose.removeEventListener('click', onCloseButtonClick);
 };
 
 function closeImageEditor() {
@@ -30,16 +35,8 @@ function closeImageEditor() {
   effectLevelControl.classList.add('hidden');
   uploadForm.reset();
   resetValidation();
-
+  resetImage();
   detachEventListeners();
-}
-
-function attachEventListeners() {
-  imageEditingFormClose.addEventListener('click', onCloseButtonClick);
-}
-
-function detachEventListeners() {
-  imageEditingFormClose.removeEventListener('click', onCloseButtonClick);
 }
 
 const canCloseForm = () => !(document.activeElement === hashtagInput || document.activeElement === descriptionInput);

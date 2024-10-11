@@ -11,11 +11,10 @@ const commentsPerPage = 5;
 const createComment = ({ avatar, name, message }) => {
 
   const socialCommentElement = socialCommentsTemplate.cloneNode(true);
-
   const socialCommentAvatar = socialCommentElement.querySelector('.social__picture');
+
   socialCommentAvatar.src = avatar;
   socialCommentAvatar.alt = name;
-
   socialCommentElement.querySelector('.social__text').textContent = message;
 
   return socialCommentElement;
